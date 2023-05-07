@@ -1,24 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import { googleLogout, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { Button } from '@mui/material';
+import { useState } from 'react';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(undefined)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GoogleOAuthProvider clientId={"407712005402-sumiqjgamkhccs0flh9o6p26gijrmepn.apps.googleusercontent.com"}>
+      {!loggedIn && <GoogleLogin
+        onSuccess={credentialResponse => {
+          setLoggedIn(credentialResponse)
+          console.log(credentialResponse);
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
+      />}
+      <Button onClick={() => {
+        googleLogout()
+        setLoggedIn(undefined)
+      }}>
+        Logout
+      </Button>
+    </GoogleOAuthProvider>
   );
 }
 
