@@ -1,1 +1,2 @@
-export class CreateTagDto {}
+export class CreateTagDto {
+}
