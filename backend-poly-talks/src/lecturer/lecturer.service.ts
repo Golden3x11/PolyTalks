@@ -1,7 +1,7 @@
 import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateLecturerDto} from './dto/create-lecturer.dto';
-import {UpdateLecturerDto} from './dto/update-lecturer.dto';
-import {Lecturer} from "./entities/lecturer.entity";
+import {CreateLecturerDto} from './dto/lecturer/create-lecturer.dto';
+import {UpdateLecturerDto} from './dto/lecturer/update-lecturer.dto';
+import {Lecturer} from "./entities/lecturer/lecturer.schema";
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 
