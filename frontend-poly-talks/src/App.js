@@ -1,28 +1,26 @@
 import './App.css';
-import { googleLogout, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
-import { Button } from '@mui/material';
-import { useState } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { red } from '@mui/material/colors';
+import { Header } from './components/Header';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#e15050',
+    },
+    secondary: {
+      main: '#ffffff',
+    },
+  },
+});
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(undefined)
-
   return (
-    <GoogleOAuthProvider clientId={"407712005402-sumiqjgamkhccs0flh9o6p26gijrmepn.apps.googleusercontent.com"}>
-      {!loggedIn && <GoogleLogin
-        onSuccess={credentialResponse => {
-          setLoggedIn(credentialResponse)
-          console.log(credentialResponse);
-        }}
-        onError={() => {
-          console.log('Login Failed');
-        }}
-      />}
-      <Button onClick={() => {
-        googleLogout()
-        setLoggedIn(undefined)
-      }}>
-        Logout
-      </Button>
+    <GoogleOAuthProvider clientId={'407712005402-sumiqjgamkhccs0flh9o6p26gijrmepn.apps.googleusercontent.com'}>
+      <ThemeProvider theme={theme}>
+        <Header/>
+      </ThemeProvider>
     </GoogleOAuthProvider>
   );
 }
