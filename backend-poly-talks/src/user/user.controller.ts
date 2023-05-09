@@ -1,35 +1,25 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
-import {UserService} from './user.service';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { UserService } from './user.service';
+import { UserTokenDto } from './dto/user-token.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
-@Controller('user')
+@Controller('api/user')
 export class UserController {
     constructor(private readonly userService: UserService) {
     }
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto) {
-        return this.userService.create(createUserDto);
+    create(@Body() userTokenDto: UserTokenDto) {
+        return this.userService.create(userTokenDto);
     }
 
     @Get()
-    findAll() {
-        return this.userService.findAll();
+    findOne(@Body() userTokenDto: UserTokenDto) {
+        return this.userService.findOne(userTokenDto);
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.userService.findOne(+id);
-    }
-
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.userService.update(+id, updateUserDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.userService.remove(+id);
+    @Put()
+    update(@Body() updateUserDto: UpdateUserDto) {
+        return this.userService.update(updateUserDto);
     }
 }
