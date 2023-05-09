@@ -1,8 +1,9 @@
-import {Module} from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import {CourseService} from './course.service';
 import {CourseController} from './course.controller';
-import {MongooseModule} from "@nestjs/mongoose";
-import {Course, CourseSchema} from "./entities/course.entity";
+import {MongooseModule} from '@nestjs/mongoose';
+import {Course, CourseSchema} from './entities/course.entity';
+import {LecturerModule} from "../lecturer/lecturer.module";
 
 @Module({
     imports: [
@@ -10,11 +11,14 @@ import {Course, CourseSchema} from "./entities/course.entity";
             {
                 name: Course.name,
                 schema: CourseSchema,
-            }
-        ])
+            },
+        ]),
+        forwardRef(() => LecturerModule)
     ],
     controllers: [CourseController],
-    providers: [CourseService]
+    providers: [CourseService],
+    exports: [CourseService, MongooseModule],
 })
-export class CourseModule {
-}
+export class CourseModule {}
+
+

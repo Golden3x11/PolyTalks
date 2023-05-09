@@ -1,31 +1,31 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
-import { User } from '../../../user/entities/user.entity';
+import {IsNotEmpty, IsNumber, IsOptional, IsString} from 'class-validator';
 
 export class CreateRatingDto {
     @IsNotEmpty()
-    author: User['_id'];
+    @IsString()
+    author: string;
 
     @IsNotEmpty()
     @IsString()
     title: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsString()
     description: string;
 
     @IsNotEmpty()
     @IsNumber()
-    difficulty: number;
+    rating_difficulty: number;
 
     @IsNotEmpty()
     @IsNumber()
-    knowledge: number;
+    rating_knowledge: number;
 
     @IsNotEmpty()
     @IsNumber()
-    communication: number;
+    rating_communication: number;
 
     @IsNotEmpty()
     @IsNumber()
-    friendliness: number;
+    rating_friendliness: number;
 }

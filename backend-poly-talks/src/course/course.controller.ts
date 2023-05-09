@@ -42,7 +42,7 @@ export class CourseController {
     }
 
     @Post(':id/lecturers')
-    async addLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }): Promise<Course> {
+    async addLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }){
         return this.courseService.addLecturer(courseId, body.lecturerId);
     }
 

@@ -1,6 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import mongoose, {Document} from 'mongoose';
-import {Lecturer} from "../../lecturer/entities/lecturer/lecturer.schema";
+import {Lecturer} from "../../lecturer/entities/lecturer.entity";
 import {Attachment, AttachmentSchema} from "./attachment.entity";
 
 
