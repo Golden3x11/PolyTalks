@@ -1,27 +1,22 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import mongoose, {Document} from 'mongoose';
 import {Lecturer} from "../../lecturer/entities/lecturer/lecturer.schema";
-import {User} from "../../user/entities/user.entity";
+import {Attachment, AttachmentSchema} from "./attachment.entity";
 
 
-export type CourseDocument = Course & Document;
-
-export type Attachment = {
+export interface Course {
     _id: string;
-    filename: string;
-    uploadTime: string;
-    value: string;
+    code: string;
+    name: string;
     description: string;
-    tags: string[];
-    author: User['_id'];
-};
+    major: string;
+    lecturers: Lecturer['_id'][];
+    attachments: Attachment[];
+}
+
 
 @Schema()
 export class Course {
-
-    @Prop()
-    _id: string;
-
     @Prop({required: true, unique: true})
     code: string;
 
@@ -34,12 +29,13 @@ export class Course {
     @Prop({required: true})
     major: string;
 
-    @Prop({type: [{type: String, ref: 'Lecturer'}], default: []})
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Lecturer'}], default: []})
     lecturers: Lecturer['_id'][];
 
-    @Prop({type: [{type: Object, ref: 'Attachment'}], default: []})
+    @Prop({type: [AttachmentSchema], default: []})
     attachments: Attachment[];
 }
 
+export type CourseDocument = Course & Document;
 export const CourseSchema = SchemaFactory.createForClass(Course);
 

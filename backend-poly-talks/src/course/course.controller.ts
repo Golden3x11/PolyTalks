@@ -1,35 +1,53 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put} from '@nestjs/common';
 import {CourseService} from './course.service';
-import {CreateCourseDto} from './dto/create-course.dto';
 import {UpdateCourseDto} from './dto/update-course.dto';
+import {Course} from "./entities/course.entity";
+import {CreateCourseDto} from "./dto/create-course.dto";
+import {Attachment} from "./entities/attachment.entity";
+import {CreateAttachmentDto} from "./dto/crate-attachment.dto";
 
-@Controller('course')
+@Controller('api/course')
 export class CourseController {
     constructor(private readonly courseService: CourseService) {
     }
 
-    @Post()
-    create(@Body() createCourseDto: CreateCourseDto) {
-        return this.courseService.create(createCourseDto);
-    }
-
     @Get()
-    findAll() {
+    async findAll(): Promise<Course[]> {
         return this.courseService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.courseService.findOne(+id);
+    findById(@Param('id') id: string): Promise<Course> {
+        return this.courseService.findById(id);
     }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-        return this.courseService.update(+id, updateCourseDto);
+    @Put()
+    async create(@Body() createCourseDto: CreateCourseDto): Promise<Course> {
+        return this.courseService.create(createCourseDto);
+    }
+
+    @Post(':id')
+    update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto): Promise<Course> {
+        return this.courseService.update(id, updateCourseDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.courseService.remove(+id);
+    async remove(@Param('id') id: string): Promise<Course> {
+        return this.courseService.delete(id);
+    }
+
+    @Post(':id/attachments')
+    async addAttachment(@Param('id') courseId: string, @Body() attachment: CreateAttachmentDto): Promise<Course> {
+        return this.courseService.addAttachment(courseId, attachment);
+    }
+
+    @Post(':id/lecturers')
+    async addLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }): Promise<Course> {
+        return this.courseService.addLecturer(courseId, body.lecturerId);
+    }
+
+    @Delete(':id/lecturers')
+    async removeLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }): Promise<Course> {
+        return this.courseService.removeLecturer(courseId, body.lecturerId);
     }
 }
