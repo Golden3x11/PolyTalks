@@ -2,11 +2,11 @@ import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import mongoose, {Document} from "mongoose";
 import {User} from "../../user/entities/user.entity";
 
-@Schema()
+@Schema({ _id: false })
 export class Post {
 
-    @Prop({type: mongoose.Schema.Types.ObjectId, auto: true})
-    _id: mongoose.Types.ObjectId;
+    @Prop({required: true})
+    _id: string;
 
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
     author: User['_id'];

@@ -1,34 +1,33 @@
-import {BadRequestException, Injectable, NotFoundException, Post} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateThreadDto} from './dto/create-thread.dto';
 import {UpdateThreadDto} from './dto/update-thread.dto';
 import {Thread, ThreadDocument} from "./entities/thread.entity";
 import {InjectModel} from "@nestjs/mongoose";
 import mongoose, {Model} from "mongoose";
 import {Tag, TagDocument} from "../tag/entities/tag.entity";
-import {PostDocument} from "./entities/post.entity";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {UpdatePostDto} from "./dto/update-post.dto";
 
 @Injectable()
 export class ThreadService {
     constructor(@InjectModel(Thread.name) private threadModel: Model<ThreadDocument>,
-                @InjectModel(Tag.name) private tagModel: Model<TagDocument>,
-                @InjectModel(Post.name) private postModel: Model<PostDocument>) {
+                // @InjectModel(Tag.name) private tagModel: Model<TagDocument>
+                ) {
     }
 
     async create(createThreadDto: CreateThreadDto): Promise<Thread> {
         const createdThread = new this.threadModel(createThreadDto);
 
-        const existingTagIds = await this.tagModel
-            .find({_id: {$in: createdThread.tags}})
-            .distinct('_id')
-            .exec();
-
-        if (existingTagIds.length !== createdThread.tags.length) {
-            throw new BadRequestException(
-                'One or more tags specified in the create request do not exist',
-            );
-        }
+        // const existingTagIds = await this.tagModel
+        //     .find({_id: {$in: createdThread.tags}})
+        //     .distinct('_id')
+        //     .exec();
+        //
+        // if (existingTagIds.length !== createdThread.tags.length) {
+        //     throw new BadRequestException(
+        //         'One or more tags specified in the create request do not exist',
+        //     );
+        // }
 
         return createdThread.save();
     }
@@ -51,14 +50,14 @@ export class ThreadService {
             throw new NotFoundException(`Thread with ID ${id} not found`);
         }
 
-        const existingTagIds = await this.tagModel
-            .find({_id: {$in: updateThreadDto.tags}})
-            .distinct('_id')
-            .exec();
+        // const existingTagIds = await this.tagModel
+        //     .find({_id: {$in: updateThreadDto.tags}})
+        //     .distinct('_id')
+        //     .exec();
 
-        if (existingTagIds.length !== updateThreadDto.tags.length) {
-            throw new BadRequestException('One or more tags specified in the create request do not exist');
-        }
+        // if (existingTagIds.length !== updateThreadDto.tags.length) {
+        //     throw new BadRequestException('One or more tags specified in the create request do not exist');
+        // }
 
         const {tags = [], subscribers = [], ...updates} = updateThreadDto;
         const updatedThread = {
@@ -85,10 +84,10 @@ export class ThreadService {
             throw new NotFoundException(`Thread with ID ${threadId} not found`);
         }
 
-        const post = await this.postModel.create({
-            _id: new mongoose.Types.ObjectId(),
+        const post = {
+            _id: new mongoose.Types.ObjectId().toHexString(),
             ...createPostDto
-        });
+        };
 
         thread.posts.push(post);
         await thread.save();
