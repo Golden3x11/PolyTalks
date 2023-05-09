@@ -3,7 +3,6 @@ import {CourseService} from './course.service';
 import {UpdateCourseDto} from './dto/update-course.dto';
 import {Course} from "./entities/course.entity";
 import {CreateCourseDto} from "./dto/create-course.dto";
-import {Attachment} from "./entities/attachment.entity";
 import {CreateAttachmentDto} from "./dto/crate-attachment.dto";
 
 @Controller('api/course')
@@ -42,12 +41,17 @@ export class CourseController {
     }
 
     @Post(':id/lecturers')
-    async addLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }){
+    async addLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }) {
         return this.courseService.addLecturer(courseId, body.lecturerId);
     }
 
     @Delete(':id/lecturers')
     async removeLecturer(@Param('id') courseId: string, @Body() body: { lecturerId: string }): Promise<Course> {
         return this.courseService.removeLecturer(courseId, body.lecturerId);
+    }
+
+    @Get(':id/attachment/:aId')
+    async downloadValue(@Param('id') id: string, @Param('aId') aId: string): Promise<{}> {
+        return this.courseService.downloadValue(id, aId);
     }
 }

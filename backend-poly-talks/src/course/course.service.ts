@@ -1,6 +1,6 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {Model} from 'mongoose';
+import mongoose, {Model} from 'mongoose';
 import {Course, CourseDocument} from './entities/course.entity';
 import {CreateCourseDto} from './dto/create-course.dto';
 import {UpdateCourseDto} from './dto/update-course.dto';
@@ -14,30 +14,34 @@ export class CourseService {
     }
 
     async create(createCourseDto: CreateCourseDto): Promise<Course> {
-        const createdCourse = new this.courseModel(createCourseDto);
-
         const existingLecturerIds = await this.lecturerModel
-            .find({_id: {$in: createdCourse.lecturers}})
+            .find({_id: {$in: createCourseDto.lecturers}})
             .distinct('_id')
             .exec();
 
-        if (existingLecturerIds.length !== createdCourse.lecturers.length) {
+        if (createCourseDto.lecturers && existingLecturerIds.length !== createCourseDto.lecturers.length) {
             throw new BadRequestException(
                 'One or more lecturers specified in the create request do not exist',
             );
         }
+        const {attachments, ...course} = createCourseDto;
 
-        return createdCourse.save();
+        return this.courseModel.create(course);
     }
 
     async findAll(): Promise<Course[]> {
-        return this.courseModel.find().populate('lecturers').exec();
+        return this.courseModel
+            .find()
+            .populate('lecturers')
+            .select('-attachments.value')
+            .exec();
     }
 
     async findById(id: string): Promise<Course> {
         const course = await this.courseModel
             .findById(id)
             .populate('lecturers')
+            .select('-attachments.value')
             .exec();
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
@@ -56,7 +60,7 @@ export class CourseService {
             _id: {$in: updateCourseDto.lecturers}
         }).distinct('_id');
 
-        if (existingLecturerIds.length !== updateCourseDto.lecturers.length) {
+        if (updateCourseDto.lecturers && existingLecturerIds.length !== updateCourseDto.lecturers.length) {
             throw new BadRequestException('One or more courses specified in the update do not exist');
         }
 
@@ -64,14 +68,20 @@ export class CourseService {
         const updatedCourse = {
             ...course.toObject(),
             ...updates,
-            attachments: [...course.attachments, ...attachments],
             lecturers: [...course.lecturers, ...lecturers],
         };
-        return this.courseModel.findByIdAndUpdate(id, updatedCourse, {new: true}).exec();
+        return this.courseModel
+            .findByIdAndUpdate(id, updatedCourse, {new: true})
+            .select('-attachments.value')
+            .exec();
     }
 
     async delete(id: string): Promise<Course> {
-        const course = await this.courseModel.findByIdAndDelete(id).exec();
+        const course = await this.courseModel
+            .findByIdAndDelete(id)
+            .select('-attachments.value')
+            .exec();
+
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
@@ -84,11 +94,22 @@ export class CourseService {
             throw new NotFoundException(`Course with ID ${courseId} not found`);
         }
 
-        course.attachments.push(attachment);
-        return course.save();
+        course.attachments.push({
+            _id: new mongoose.Types.ObjectId().toHexString(),
+            ...attachment
+        });
+
+
+        await course.save();
+
+        return this.courseModel
+            .findById(courseId)
+            .populate('lecturers')
+            .select('-attachments.value')
+            .exec();
     }
 
-    async addLecturer(lecturerId: string, courseId: string) {
+    async addLecturer(lecturerId: string, courseId: string): Promise<Course> {
         const course = await this.courseModel.findById(courseId);
         if (!course) {
             throw new NotFoundException(`Course with id ${courseId} not found`);
@@ -108,6 +129,12 @@ export class CourseService {
 
         lecturer.courses.push(courseId);
         await lecturer.save();
+
+        return this.courseModel
+            .findById(courseId)
+            .populate('lecturers')
+            .select('-attachments.value')
+            .exec();
     }
 
     async removeLecturer(courseId: string, lecturerId: string): Promise<Course> {
@@ -141,6 +168,27 @@ export class CourseService {
         await course.save();
         await lecturer.save();
 
-        return course;
+        return this.courseModel
+            .findById(courseId)
+            .populate('lecturers')
+            .select('-attachments.value')
+            .exec();
+    }
+
+    async downloadValue(courseId: string, attachmentId: string): Promise<{}> {
+        const course = await this.courseModel.findById(courseId);
+        if (!course) {
+            throw new NotFoundException(`Course with ID ${courseId} not found`);
+        }
+
+        const attachment = course.attachments.find(a => a._id === attachmentId);
+        if (!attachment) {
+            throw new NotFoundException(`Attachment with ID ${attachmentId} not found`);
+        }
+
+        return {
+            name: attachment.filename,
+            value: attachment.value
+        };
     }
 }
