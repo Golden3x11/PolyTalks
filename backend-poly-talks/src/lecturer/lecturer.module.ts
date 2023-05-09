@@ -20,4 +20,5 @@ import {Lecturer, LecturerSchema} from "./entities/lecturer.entity";
     providers: [LecturerService],
     exports: [LecturerService, MongooseModule],
 })
-export class LecturerModule {}
+export class LecturerModule {
+}

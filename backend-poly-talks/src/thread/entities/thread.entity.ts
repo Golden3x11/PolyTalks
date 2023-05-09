@@ -1,38 +1,33 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import mongoose, {Document} from 'mongoose';
+import {Post, PostSchema} from "./post.entity";
+import {User} from "../../user/entities/user.entity";
+import {Tag} from "../../tag/entities/tag.entity";
 
 export type ThreadDocument = Thread & Document;
 
 @Schema()
 export class Thread {
     @Prop()
-    id: string;
-
-    @Prop()
     title: string;
 
     @Prop()
     description: string;
 
-    @Prop([String])
-    tags: string[];
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}], default: []})
+    tags: Tag[];
 
     @Prop()
     creationDate: string;
 
-    @Prop()
-    author: { username: string; _id: string };
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
+    author: User['_id'];
 
-    @Prop([{_id: false}])
-    posts: {
-        author: { username: string; _id: string };
-        content: string;
-        creationDate: string;
-        comments: string[];
-    }[];
+    @Prop({type: [PostSchema], default: []})
+    posts: Post[];
 
-    @Prop([{_id: false}])
-    subscribers: { email: string; id: string }[];
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: []})
+    subscribers: User['_id'][];
 }
 
 export const ThreadSchema = SchemaFactory.createForClass(Thread);

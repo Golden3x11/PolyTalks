@@ -1,26 +1,140 @@
-import {Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException, Post} from '@nestjs/common';
 import {CreateThreadDto} from './dto/create-thread.dto';
 import {UpdateThreadDto} from './dto/update-thread.dto';
+import {Thread, ThreadDocument} from "./entities/thread.entity";
+import {InjectModel} from "@nestjs/mongoose";
+import mongoose, {Model} from "mongoose";
+import {Tag, TagDocument} from "../tag/entities/tag.entity";
+import {PostDocument} from "./entities/post.entity";
+import {CreatePostDto} from "./dto/create-post.dto";
+import {UpdatePostDto} from "./dto/update-post.dto";
 
 @Injectable()
 export class ThreadService {
-    create(createThreadDto: CreateThreadDto) {
-        return 'This action adds a new thread';
+    constructor(@InjectModel(Thread.name) private threadModel: Model<ThreadDocument>,
+                @InjectModel(Tag.name) private tagModel: Model<TagDocument>,
+                @InjectModel(Post.name) private postModel: Model<PostDocument>) {
     }
 
-    findAll() {
-        return `This action returns all thread`;
+    async create(createThreadDto: CreateThreadDto): Promise<Thread> {
+        const createdThread = new this.threadModel(createThreadDto);
+
+        const existingTagIds = await this.tagModel
+            .find({_id: {$in: createdThread.tags}})
+            .distinct('_id')
+            .exec();
+
+        if (existingTagIds.length !== createdThread.tags.length) {
+            throw new BadRequestException(
+                'One or more tags specified in the create request do not exist',
+            );
+        }
+
+        return createdThread.save();
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} thread`;
+    async findAll(): Promise<Thread[]> {
+        return this.threadModel.find().populate('tags').populate('author').exec();
     }
 
-    update(id: number, updateThreadDto: UpdateThreadDto) {
-        return `This action updates a #${id} thread`;
+    async findById(id: string): Promise<Thread> {
+        const thread = await this.threadModel.findById(id).populate('tags').populate('author').exec();
+        if (!thread) {
+            throw new NotFoundException(`Thread with ID ${id} not found`);
+        }
+        return thread;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} thread`;
+    async update(id: string, updateThreadDto: UpdateThreadDto): Promise<Thread> {
+        const thread = await this.threadModel.findById(id).populate('tags').populate('author').exec();
+        if (!thread) {
+            throw new NotFoundException(`Thread with ID ${id} not found`);
+        }
+
+        const existingTagIds = await this.tagModel
+            .find({_id: {$in: updateThreadDto.tags}})
+            .distinct('_id')
+            .exec();
+
+        if (existingTagIds.length !== updateThreadDto.tags.length) {
+            throw new BadRequestException('One or more tags specified in the create request do not exist');
+        }
+
+        const {tags = [], subscribers = [], ...updates} = updateThreadDto;
+        const updatedThread = {
+            ...thread.toObject(),
+            ...updates,
+            tags: [...thread.tags, ...tags],
+            subscribers: [...thread.subscribers, ...subscribers],
+        };
+
+        return this.threadModel.findByIdAndUpdate(id, updatedThread, {new: true}).exec();
+    }
+
+    async delete(id: string): Promise<Thread> {
+        const deletedThread = await this.threadModel.findByIdAndDelete(id);
+        if (!deletedThread) {
+            throw new NotFoundException(`Thread #${id} not found`);
+        }
+        return deletedThread;
+    }
+
+    async addPostToThread(threadId: string, createPostDto: CreatePostDto): Promise<Thread> {
+        const thread = await this.threadModel.findById(threadId);
+        if (!thread) {
+            throw new NotFoundException(`Thread with ID ${threadId} not found`);
+        }
+
+        const post = await this.postModel.create({
+            _id: new mongoose.Types.ObjectId(),
+            ...createPostDto
+        });
+
+        thread.posts.push(post);
+        await thread.save();
+        return thread;
+    }
+
+    async deletePostFromThread(threadId: string, postId: string): Promise<Thread> {
+        const thread = await this.threadModel.findById(threadId).exec();
+        if (!thread) {
+            throw new NotFoundException(`Thread with ID ${threadId} not found`);
+        }
+        const postIndex = thread.posts.findIndex(post => post._id.toString() === postId);
+        if (postIndex === -1) {
+            throw new NotFoundException(`Post with ID ${postId} not found in thread`);
+        }
+        thread.posts.splice(postIndex, 1);
+        return thread.save();
+    }
+
+    async updatePost(threadId: string, postId: string, updatePostDto: UpdatePostDto): Promise<Thread> {
+        const thread = await this.threadModel.findById(threadId);
+        if (!thread) {
+            throw new NotFoundException(`Thread with id ${threadId} not found`);
+        }
+
+        const postIndex = thread.posts.findIndex(
+            (post) => post._id.toString() === postId,
+        );
+        if (postIndex === -1) {
+            throw new Error(`Post with id ${postId} not found for thread`);
+        }
+
+        const post = thread.posts[postIndex];
+        if (!post) {
+            throw new NotFoundException(`Post with id ${postId} not found`);
+        }
+
+        if (updatePostDto.content) {
+            post.content = updatePostDto.content;
+        }
+
+        if (updatePostDto.creationDate) {
+            post.creationDate = updatePostDto.creationDate;
+        }
+
+        await thread.save();
+        return thread;
     }
 }

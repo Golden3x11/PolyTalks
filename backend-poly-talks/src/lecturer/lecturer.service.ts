@@ -37,10 +37,7 @@ export class LecturerService {
     }
 
     async findById(id: string): Promise<Lecturer> {
-        const lecturer = await this.lecturerModel
-            .findById(id)
-            .populate('courses')
-            .exec();
+        const lecturer = await this.lecturerModel.findById(id).populate('courses').exec();
         if (!lecturer) {
             throw new NotFoundException(`Lecturer with ID ${id} not found`);
         }

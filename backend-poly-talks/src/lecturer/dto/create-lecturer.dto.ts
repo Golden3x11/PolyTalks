@@ -15,7 +15,7 @@ export class CreateLecturerDto {
     email: string;
 
     @IsArray()
-    courses?: string[];
+    courses: string[];
 
     @IsArray()
     @ValidateNested({each: true})
