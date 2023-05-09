@@ -3,7 +3,11 @@ import {Document} from "mongoose";
 
 @Schema({ _id: false })
 export class Attachment {
-    @Prop({required: true, unique: true})
+
+    @Prop({required: true})
+    _id: string;
+
+    @Prop({required: true})
     filename: string;
 
     @Prop({required: true})

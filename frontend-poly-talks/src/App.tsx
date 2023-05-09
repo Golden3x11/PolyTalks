@@ -5,6 +5,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { SideNavBar } from './components/SideNavBar';
 import { Header } from './components/Header';
+import { FileUploadComponent } from "./components/Attachments/FileUploadComponent";
+import {Attachments} from "./components/Attachments/Attachments";
 
 const theme = createTheme({
   palette: {
@@ -25,7 +27,7 @@ function App() {
 
           <Header/>
           <SideNavBar/>
-          {/*<FileUploadComponent/>*/}
+          <Attachments/>
         </ThemeProvider>
       </GoogleOAuthProvider>
   );
