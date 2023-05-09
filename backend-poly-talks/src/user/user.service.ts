@@ -1,26 +1,62 @@
-import {Injectable} from '@nestjs/common';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { UserTokenDto } from './dto/user-token.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from './entities/user.entity';
+import jwtDecode from 'jwt-decode';
 
 @Injectable()
 export class UserService {
-    create(createUserDto: CreateUserDto) {
-        return 'This action adds a new user';
+    constructor(
+      @InjectModel(User.name) private userModel: Model<UserDocument>
+    ) {}
+
+    create(userTokenDto: UserTokenDto) {
+        const decodedToken = this.decodeToken(userTokenDto)
+
+        return this.userModel.findOne({"email": decodedToken.email}).exec().then(user => {
+            if(user){
+                throw new ConflictException("User has already created an account")
+            }else{
+                const newUser = new this.userModel({"username": decodedToken.name, "email": decodedToken.email, "avatar": 1})
+                return newUser.save()
+            }
+        })
     }
 
-    findAll() {
-        return `This action returns all user`;
+    findOne(userTokenDto: UserTokenDto) {
+        const email = this.decodeToken(userTokenDto).email
+        return this.userModel.findOne({"email": email}).exec().then(user => {
+            if(!user)
+                throw new NotFoundException(`User with email ${email} not found`);
+        })
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
+    update(updateUserDto: UpdateUserDto) {
+        const email = this.decodeToken(updateUserDto).email
+
+        return this.userModel.findOneAndUpdate(
+          {"email": email},
+          {"username": updateUserDto.username, "avatar": updateUserDto.avatar},
+          {new: true}
+        ).exec().then(user => {
+            if(!user)
+                throw new NotFoundException(`User with email ${email} not found`);
+            return user;
+        })
     }
 
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
+    private decodeToken(userTokenDto: UserTokenDto): DecodedUser {
+        const decodedToken = jwtDecode(userTokenDto.token);
+        return {
+            "email": decodedToken["email"],
+            "name": decodedToken["name"]
+        }
     }
+}
 
-    remove(id: number) {
-        return `This action removes a #${id} user`;
-    }
+interface DecodedUser {
+    email: string,
+    name: string
 }
