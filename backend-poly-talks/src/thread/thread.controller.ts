@@ -50,4 +50,9 @@ export class ThreadController {
     async updatePost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() updatePostDto: UpdatePostDto,): Promise<Thread> {
         return this.threadService.updatePost(threadId, postId, updatePostDto);
     }
+
+    @Post(':threadId/posts/:postId')
+    async addCommentToPost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() createPostDto: CreatePostDto,): Promise<Thread> {
+        return this.threadService.addCommentToPost(threadId, postId, createPostDto);
+    }
 }
