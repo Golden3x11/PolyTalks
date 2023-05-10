@@ -12,7 +12,4 @@ export class CreatePostDto {
     @IsOptional()
     @IsString()
     creationDate: string;
-
-    @IsArray()
-    comments: string[];
 }

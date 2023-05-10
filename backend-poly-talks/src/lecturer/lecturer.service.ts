@@ -23,7 +23,7 @@ export class LecturerService {
             .distinct('_id')
             .exec();
 
-        if (existingCourseIds.length !== lecturer.courses.length) {
+        if (lecturer.courses && existingCourseIds.length !== lecturer.courses.length) {
             throw new BadRequestException(
                 'One or more courses specified in the create request do not exist',
             );
@@ -55,7 +55,7 @@ export class LecturerService {
             _id: {$in: updateLecturerDto.courses}
         }).distinct('_id');
 
-        if (existingCourseIds.length !== updateLecturerDto.courses.length) {
+        if (updateLecturerDto.courses && existingCourseIds.length !== updateLecturerDto.courses.length) {
             throw new BadRequestException('One or more courses specified in the update do not exist');
         }
 
