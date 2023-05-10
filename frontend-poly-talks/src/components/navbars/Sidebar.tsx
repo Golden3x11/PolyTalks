@@ -19,7 +19,8 @@ const useStyles = makeStyles()((theme) => ({
     marginTop: "5%"
   },
   header: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    fontWeight: "bold"
   }
 }));
 

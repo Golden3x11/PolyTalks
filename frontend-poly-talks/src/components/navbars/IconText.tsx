@@ -17,12 +17,12 @@ const useStyles = makeStyles()({
   }
 });
 
-interface ItemWithIconProps {
+interface IconTextProps {
   text: string;
   Icon: React.ElementType;
 }
 
-export const IconText = (props: ItemWithIconProps) => {
+export const IconText = (props: IconTextProps) => {
   const { text, Icon } = props;
   const { classes, cx } = useStyles(undefined, undefined)
 
