@@ -20,12 +20,12 @@ export class CourseController {
         return this.courseService.findById(id);
     }
 
-    @Put()
+    @Post()
     async create(@Body() createCourseDto: CreateCourseDto): Promise<Course> {
         return this.courseService.create(createCourseDto);
     }
 
-    @Post(':id')
+    @Put(':id')
     update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto): Promise<Course> {
         return this.courseService.update(id, updateCourseDto);
     }

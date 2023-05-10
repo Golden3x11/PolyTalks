@@ -23,8 +23,7 @@ export const FileDownload = () => {
 
     return (
         <Button variant={'contained'}
-                onClick={downloadFile}
-                style={{marginTop: '10em', marginLeft: '50em'}}>
+                onClick={downloadFile}>
             Download File
         </Button>
     );
