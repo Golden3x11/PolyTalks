@@ -7,27 +7,28 @@ import mongoose, {Model} from "mongoose";
 import {Tag, TagDocument} from "../tag/entities/tag.entity";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {UpdatePostDto} from "./dto/update-post.dto";
+import {Post} from "./entities/post.entity";
 
 @Injectable()
 export class ThreadService {
     constructor(@InjectModel(Thread.name) private threadModel: Model<ThreadDocument>,
-                // @InjectModel(Tag.name) private tagModel: Model<TagDocument>
+                @InjectModel(Tag.name) private tagModel: Model<TagDocument>
                 ) {
     }
 
     async create(createThreadDto: CreateThreadDto): Promise<Thread> {
         const createdThread = new this.threadModel(createThreadDto);
 
-        // const existingTagIds = await this.tagModel
-        //     .find({_id: {$in: createdThread.tags}})
-        //     .distinct('_id')
-        //     .exec();
-        //
-        // if (existingTagIds.length !== createdThread.tags.length) {
-        //     throw new BadRequestException(
-        //         'One or more tags specified in the create request do not exist',
-        //     );
-        // }
+        const existingTagIds = await this.tagModel
+            .find({_id: {$in: createdThread.tags}})
+            .distinct('_id')
+            .exec();
+
+        if (createdThread.tags && existingTagIds.length !== createdThread.tags.length) {
+            throw new BadRequestException(
+                'One or more tags specified in the create request do not exist',
+            );
+        }
 
         return createdThread.save();
     }
@@ -50,14 +51,14 @@ export class ThreadService {
             throw new NotFoundException(`Thread with ID ${id} not found`);
         }
 
-        // const existingTagIds = await this.tagModel
-        //     .find({_id: {$in: updateThreadDto.tags}})
-        //     .distinct('_id')
-        //     .exec();
+        const existingTagIds = await this.tagModel
+            .find({_id: {$in: updateThreadDto.tags}})
+            .distinct('_id')
+            .exec();
 
-        // if (existingTagIds.length !== updateThreadDto.tags.length) {
-        //     throw new BadRequestException('One or more tags specified in the create request do not exist');
-        // }
+        if (updateThreadDto.tags && existingTagIds.length !== updateThreadDto.tags.length) {
+            throw new BadRequestException('One or more tags specified in the create request do not exist');
+        }
 
         const {tags = [], subscribers = [], ...updates} = updateThreadDto;
         const updatedThread = {
@@ -86,7 +87,8 @@ export class ThreadService {
 
         const post = {
             _id: new mongoose.Types.ObjectId().toHexString(),
-            ...createPostDto
+            ...createPostDto,
+            comments: []
         };
 
         thread.posts.push(post);
@@ -135,5 +137,27 @@ export class ThreadService {
 
         await thread.save();
         return thread;
+    }
+
+    async addCommentToPost(threadId: string, postId: string, createPostDto: CreatePostDto): Promise<Thread>{
+        const thread = await this.threadModel.findById(threadId);
+        if (!thread) {
+            throw new NotFoundException(`Thread with id ${threadId} not found`);
+        }
+
+        const post = thread.posts.find(post  => post._id.toString() === postId);
+        if (!post) {
+            throw new Error(`Post with id ${postId} not found for thread`);
+        }
+
+        const comment = {
+            _id: new mongoose.Types.ObjectId().toHexString(),
+            ...createPostDto,
+            comments: []
+        };
+
+        post.comments.push(comment)
+
+        return  thread.save()
     }
 }

@@ -51,7 +51,7 @@ export const FileUploadComponent = () => {
 
   return (
       <>
-        <form onSubmit={handleFileSubmit} style={{marginTop: '10em', marginLeft: '20em'}}>
+        <form onSubmit={handleFileSubmit} >
           <Input type="file" onChange={handleFileUpload}/>
           <Button
               variant={'contained'}
