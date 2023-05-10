@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+import logo from '../public/logo.svg';
 import './App.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
