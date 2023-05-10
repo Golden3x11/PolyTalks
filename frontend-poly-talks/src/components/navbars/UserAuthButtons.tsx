@@ -16,7 +16,7 @@ const useStyles = makeStyles()({
   },
 });
 
-export const UserButtons = () => {
+export const UserAuthButtons = () => {
   const [loggedIn, setLoggedIn] = useState<CredentialResponse | undefined>(undefined); // TODO: store in context or sth
   const { classes, cx } = useStyles(undefined, undefined);
 

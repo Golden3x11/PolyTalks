@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { SideNavBar } from './components/navbars/SideNavBar';
+import { Sidebar } from './components/navbars/Sidebar';
 import { Header } from './components/navbars/Header';
 
 const theme = createTheme({
@@ -23,7 +23,7 @@ function App() {
           <CssBaseline/>
 
           <Header/>
-          <SideNavBar/>
+          <Sidebar/>
         </ThemeProvider>
       </GoogleOAuthProvider>
   );

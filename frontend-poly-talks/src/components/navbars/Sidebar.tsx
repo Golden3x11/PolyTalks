@@ -1,7 +1,11 @@
 import { Stack, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import { ItemWithIcon } from './ItemWithIcon';
+import { IconText } from './IconText';
 import CallMadeIcon from '@mui/icons-material/CallMade';
+import StarIcon from '@mui/icons-material/Star';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import PersonIcon from '@mui/icons-material/Person';
+import TagIcon from '@mui/icons-material/Tag';
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -19,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
   }
 }));
 
-export const SideNavBar = () => {
+export const Sidebar = () => {
   const { classes, cx } = useStyles(undefined, undefined);
 
   return (
@@ -29,22 +33,22 @@ export const SideNavBar = () => {
     >
       <Stack spacing={2}>
         <Typography className={`${classes.firstChild} ${classes.header}`}>Tematy</Typography>
-        <ItemWithIcon text={"Na czasie"} icon={CallMadeIcon}/>
-        <ItemWithIcon text={"Ulubione"} icon={CallMadeIcon}/>
+        <IconText text={"Na czasie"} Icon={CallMadeIcon}/>
+        <IconText text={"Ulubione"} Icon={StarIcon}/>
       </Stack>
 
       <Stack spacing={2}>
         <Typography className={classes.header}>Kategorie</Typography>
-        <ItemWithIcon text={"Kursy"} icon={CallMadeIcon}/>
-        <ItemWithIcon text={"Prowadzący"} icon={CallMadeIcon}/>
-        <ItemWithIcon text={"Inne"} icon={CallMadeIcon}/>
+        <IconText text={"Kursy"} Icon={MenuBookIcon}/>
+        <IconText text={"Prowadzący"} Icon={PersonIcon}/>
+        <IconText text={"Inne"} Icon={TagIcon}/>
       </Stack>
 
       <Stack spacing={2}>
         <Typography className={classes.header}>Utwórz</Typography>
-        <ItemWithIcon text={"Kurs"} icon={CallMadeIcon}/>
-        <ItemWithIcon text={"Prowadzącego"} icon={CallMadeIcon}/>
-        <ItemWithIcon text={"Wątek"} icon={CallMadeIcon}/>
+        <IconText text={"Kurs"} Icon={MenuBookIcon}/>
+        <IconText text={"Prowadzącego"} Icon={PersonIcon}/>
+        <IconText text={"Wątek"} Icon={TagIcon}/>
       </Stack>
 
     </Stack>

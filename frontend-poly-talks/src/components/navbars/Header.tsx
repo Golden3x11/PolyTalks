@@ -1,6 +1,6 @@
 import { AppBar } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import { UserButtons } from './UserButtons';
+import { UserAuthButtons } from './UserAuthButtons';
 
 const useStyles = makeStyles()({
   logo: {
@@ -26,9 +26,10 @@ export const Header = () => {
     <AppBar
       className={cx(classes.appBar)}
       color={'secondary'}
+      elevation={0}
     >
       <img src="/logo.svg" alt={"logo"} className={cx(classes.logo)}/>
-      <UserButtons/>
+      <UserAuthButtons/>
     </AppBar>
   );
 };
