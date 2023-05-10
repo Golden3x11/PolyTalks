@@ -17,6 +17,7 @@
     "web-vitals": "^2.1.4",
     "@react-oauth/google": "^0.11.0",
     "@mui/material": "^5.12.3",
+    "@mui/icons-material": "^5.11.16",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "tss-react": "4.8.3"
