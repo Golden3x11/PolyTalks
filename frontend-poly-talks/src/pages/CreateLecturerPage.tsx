@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 
-export const CoursesPage = () => {
+export const CreateLecturerPage = () => {
   return (
     <div>
       <Typography>
-        Kursy
+        Dodaj prowadzącego
       </Typography>
     </div>
   );

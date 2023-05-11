@@ -2,6 +2,7 @@ import { CredentialResponse, GoogleLogin, googleLogout } from '@react-oauth/goog
 import { Avatar, Button } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles()({
   container: {
@@ -43,7 +44,9 @@ export const UserAuthButtons = () => {
           }}>
           Logout
         </Button>
-        <Avatar className={cx(classes.margin)} />
+        <NavLink to={"/user"}>
+          <Avatar className={cx(classes.margin)} />
+        </NavLink>
       </>
       }
     </div>

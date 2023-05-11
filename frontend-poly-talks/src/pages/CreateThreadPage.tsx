@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 
-export const CoursesPage = () => {
+export const CreateThreadPage = () => {
   return (
     <div>
       <Typography>
-        Kursy
+        Utwórz wątek
       </Typography>
     </div>
   );

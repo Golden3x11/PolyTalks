@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 
-export const CoursesPage = () => {
+export const UserPage = () => {
   return (
     <div>
       <Typography>
-        Kursy
+        Ustawienia użytkownika
       </Typography>
     </div>
   );

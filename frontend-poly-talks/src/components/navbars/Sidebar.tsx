@@ -38,22 +38,22 @@ export const Sidebar = () => {
     >
       <Stack spacing={innerStacksSpacing}>
         <Typography className={`${classes.firstChild} ${classes.header}`}>Tematy</Typography>
-        <IconText text={"Na czasie"} Icon={CallMadeIcon}/>
-        <IconText text={"Ulubione"} Icon={StarIcon}/>
+        <IconText text={"Na czasie"} Icon={CallMadeIcon} route={"/"}/>
+        <IconText text={"Ulubione"} Icon={StarIcon} route={"/favourites"}/>
       </Stack>
 
       <Stack spacing={innerStacksSpacing}>
         <Typography className={classes.header}>Kategorie</Typography>
-        <IconText text={"Kursy"} Icon={MenuBookIcon}/>
-        <IconText text={"Prowadzący"} Icon={PersonIcon}/>
-        <IconText text={"Inne"} Icon={TagIcon}/>
+        <IconText text={"Kursy"} Icon={MenuBookIcon} route={"/courses"}/>
+        <IconText text={"Prowadzący"} Icon={PersonIcon} route={"/lecturers"}/>
+        <IconText text={"Inne"} Icon={TagIcon} route={"/threads"}/>
       </Stack>
 
       <Stack spacing={innerStacksSpacing}>
         <Typography className={classes.header}>Utwórz</Typography>
-        <IconText text={"Kurs"} Icon={MenuBookIcon}/>
-        <IconText text={"Prowadzącego"} Icon={PersonIcon}/>
-        <IconText text={"Wątek"} Icon={TagIcon}/>
+        <IconText text={"Kurs"} Icon={MenuBookIcon} route={"/courses/create"}/>
+        <IconText text={"Prowadzącego"} Icon={PersonIcon} route={"/lecturers/create"}/>
+        <IconText text={"Wątek"} Icon={TagIcon} route={"/threads/create"}/>
       </Stack>
 
     </Stack>
