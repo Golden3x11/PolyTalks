@@ -11,12 +11,14 @@ const useStyles = makeStyles()((theme) => ({
   container: {
     borderRight: '3px solid grey',
     position: "fixed",
-    height: "100%",
+    alignSelf: "self-start",
     width: "15%",
-    padding: "1%"
+    padding: "1%",
+    top: "0",
+    height: "100%"
   },
   firstChild: {
-    marginTop: "5%"
+    marginTop: "38%"
   },
   header: {
     color: theme.palette.primary.main,
@@ -26,30 +28,32 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Sidebar = () => {
   const { classes, cx } = useStyles(undefined, undefined);
+  const innerStacksSpacing = 2;
+  const outerStackSpacing = 4;
 
   return (
     <Stack
       className={cx(classes.container)}
-      spacing={3}
+      spacing={outerStackSpacing}
     >
-      <Stack spacing={2}>
+      <Stack spacing={innerStacksSpacing}>
         <Typography className={`${classes.firstChild} ${classes.header}`}>Tematy</Typography>
-        <IconText text={"Na czasie"} Icon={CallMadeIcon}/>
-        <IconText text={"Ulubione"} Icon={StarIcon}/>
+        <IconText text={"Na czasie"} Icon={CallMadeIcon} route={"/"}/>
+        <IconText text={"Ulubione"} Icon={StarIcon} route={"/favourites"}/>
       </Stack>
 
-      <Stack spacing={2}>
+      <Stack spacing={innerStacksSpacing}>
         <Typography className={classes.header}>Kategorie</Typography>
-        <IconText text={"Kursy"} Icon={MenuBookIcon}/>
-        <IconText text={"Prowadzący"} Icon={PersonIcon}/>
-        <IconText text={"Inne"} Icon={TagIcon}/>
+        <IconText text={"Kursy"} Icon={MenuBookIcon} route={"/courses"}/>
+        <IconText text={"Prowadzący"} Icon={PersonIcon} route={"/lecturers"}/>
+        <IconText text={"Inne"} Icon={TagIcon} route={"/threads"}/>
       </Stack>
 
-      <Stack spacing={2}>
+      <Stack spacing={innerStacksSpacing}>
         <Typography className={classes.header}>Utwórz</Typography>
-        <IconText text={"Kurs"} Icon={MenuBookIcon}/>
-        <IconText text={"Prowadzącego"} Icon={PersonIcon}/>
-        <IconText text={"Wątek"} Icon={TagIcon}/>
+        <IconText text={"Kurs"} Icon={MenuBookIcon} route={"/courses/create"}/>
+        <IconText text={"Prowadzącego"} Icon={PersonIcon} route={"/lecturers/create"}/>
+        <IconText text={"Wątek"} Icon={TagIcon} route={"/threads/create"}/>
       </Stack>
 
     </Stack>

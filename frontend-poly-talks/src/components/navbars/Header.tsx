@@ -13,9 +13,10 @@ const useStyles = makeStyles()({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "50px",
+    height: "7vh",
     borderBottom: "3px solid grey",
-    width: "100%"
+    width: "100%",
+    overflow: "f "
   }
 });
 
