@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import './../../styles/navbars.css';
 
 const useStyles = makeStyles()({
   wrapper: {

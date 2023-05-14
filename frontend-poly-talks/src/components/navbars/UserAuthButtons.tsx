@@ -3,6 +3,7 @@ import { Avatar, Button } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { NavLink } from 'react-router-dom';
+import './../../styles/navbars.css';
 
 const useStyles = makeStyles()({
   container: {

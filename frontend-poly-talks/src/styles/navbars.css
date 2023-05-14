@@ -1,0 +1,15 @@
+.logo {
+    height: 70%;
+    margin-left: 10px;
+}
+
+.appBar {
+    position: sticky;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 7vh;
+    border-bottom: 3px solid grey;
+    width: 100%;
+}
