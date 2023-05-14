@@ -1,4 +1,4 @@
-import {IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested} from "class-validator";
+import {IsArray, IsDate, IsNotEmpty, IsOptional, IsString, ValidateNested} from "class-validator";
 import {Type} from "class-transformer";
 import {CreatePostDto} from "./create-post.dto";
 
@@ -15,11 +15,8 @@ export class CreateThreadDto {
     tags: string[];
 
     @IsOptional()
-    @IsString()
-    creationDate: string;
-
-    @IsNotEmpty()
-    author: string;
+    @IsDate()
+    creationDate: Date;
 
     @IsArray()
     @ValidateNested({each: true})

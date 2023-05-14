@@ -6,7 +6,7 @@ import {CreatePostDto} from "./dto/create-post.dto";
 import {Thread} from "./entities/thread.entity";
 import {UpdatePostDto} from "./dto/update-post.dto";
 
-@Controller('thread')
+@Controller('/api/thread')
 export class ThreadController {
     constructor(private readonly threadService: ThreadService) {
     }

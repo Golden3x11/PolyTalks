@@ -3,7 +3,7 @@ import {Document} from 'mongoose';
 
 @Schema()
 export class Tag {
-    @Prop()
+    @Prop({required: true, unique: true})
     name: string;
 }
 

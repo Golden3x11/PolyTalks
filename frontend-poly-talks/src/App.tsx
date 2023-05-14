@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { Sidebar } from './components/navbars/Sidebar';
-import { Header } from './components/navbars/Header';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { CoursesPage } from './pages/CoursesPage';
-import { LecturersPage } from './pages/LecturersPage';
-import { FavouritesPage } from './pages/FavouritesPage';
-import { TrendingPage } from './pages/TrendingPage';
-import { ThreadsPage } from './pages/ThreadsPage';
-import { CreateCoursePage } from './pages/CreateCoursePage';
-import { CreateLecturerPage } from './pages/CreateLecturerPage';
-import { CreateThreadPage } from './pages/CreateThreadPage';
-import { UserPage } from './pages/UserPage';
-import { AuthContext, DecodedToken } from './authentication/Authentication';
+import {GoogleOAuthProvider} from '@react-oauth/google';
+import {createTheme, CssBaseline, ThemeProvider} from '@mui/material';
+import {Sidebar} from './components/navbars/Sidebar';
+import {Header} from './components/navbars/Header';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {CoursesPage} from './pages/CoursesPage';
+import {LecturersPage} from './pages/LecturersPage';
+import {FavouritesPage} from './pages/FavouritesPage';
+import {TrendingPage} from './pages/TrendingPage';
+import {ThreadsPage} from './pages/ThreadsPage';
+import {CreateCoursePage} from './pages/CreateCoursePage';
+import {CreateLecturerPage} from './pages/CreateLecturerPage';
+import {CreateThreadPage} from './pages/CreateThreadPage';
+import {UserPage} from './pages/UserPage';
+import {AuthContext, DecodedToken} from './authentication/Authentication';
+import {SingleThread} from "./pages/SingleThread";
 
 const theme = createTheme({
   palette: {
@@ -48,6 +49,7 @@ function App() {
                 <Route path={'/courses'} Component={CoursesPage}></Route>
                 <Route path={'/lecturers'} Component={LecturersPage}></Route>
                 <Route path={'/threads'} Component={ThreadsPage}></Route>
+                <Route path={'/threads/:id'} Component={SingleThread}></Route>
                 <Route path={'/courses/create'} Component={CreateCoursePage}></Route>
                 <Route path={'/lecturers/create'} Component={CreateLecturerPage}></Route>
                 <Route path={'/threads/create'} Component={CreateThreadPage}></Route>
