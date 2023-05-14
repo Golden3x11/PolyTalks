@@ -1,8 +1,10 @@
 import { CredentialResponse, GoogleLogin, googleLogout } from '@react-oauth/google';
 import { Avatar, Button } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { NavLink } from 'react-router-dom';
+import './../../styles/navbars.css';
+import { AuthContext, decodeToken } from '../../authentication/Authentication';
 
 const useStyles = makeStyles()({
   container: {
@@ -18,29 +20,39 @@ const useStyles = makeStyles()({
 });
 
 export const UserAuthButtons = () => {
-  const [loggedIn, setLoggedIn] = useState<CredentialResponse | undefined>(undefined); // TODO: store in context or sth
+  const [token, setToken] = useState<CredentialResponse | undefined>(undefined); // TODO: refactor to get rid of it
   const { classes, cx } = useStyles(undefined, undefined);
+  const {currentUser, setCurrentUser} = useContext(AuthContext)
+
+  useEffect(() => {
+    if(token?.credential){
+      localStorage.setItem("token", token.credential);
+      setCurrentUser(decodeToken(token.credential));
+    }else{
+      localStorage.removeItem("token");
+      setCurrentUser(undefined);
+    }
+  }, [token, setCurrentUser])
 
   return (
     <div className={cx(classes.container)}>
-      {!loggedIn && <GoogleLogin
+      {!currentUser && <GoogleLogin
         type={'icon'}
         onSuccess={credentialResponse => {
-          setLoggedIn(credentialResponse);
-          console.log(credentialResponse);
+          setToken(credentialResponse);
         }}
         onError={() => {
           console.log('Login Failed');
         }}
       />}
 
-      {loggedIn && <>
+      {currentUser && <>
         <Button
           className={cx(classes.margin)}
           variant={'contained'}
           onClick={() => {
             googleLogout();
-            setLoggedIn(undefined);
+            setToken(undefined);
           }}>
           Logout
         </Button>

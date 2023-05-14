@@ -6,6 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import PersonIcon from '@mui/icons-material/Person';
 import TagIcon from '@mui/icons-material/Tag';
+import './../../styles/navbars.css';
 
 const useStyles = makeStyles()((theme) => ({
   container: {
