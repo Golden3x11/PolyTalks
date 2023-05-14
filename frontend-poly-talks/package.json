@@ -22,7 +22,8 @@
     "@mui/icons-material": "^5.11.16",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
-    "tss-react": "4.8.3"
+    "tss-react": "4.8.3",
+    "@types/jwt-decode": "^3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

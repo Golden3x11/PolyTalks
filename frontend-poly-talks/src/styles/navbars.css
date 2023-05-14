@@ -6,7 +6,7 @@
 .appBar {
     position: sticky;
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
     justify-content: space-between;
     align-items: center;
     height: 7vh;
