@@ -19,12 +19,11 @@ export class ThreadService {
     async create(createThreadDto: CreateThreadDto): Promise<Thread> {
         const createdThread = new this.threadModel(createThreadDto);
 
-        const existingTagIds = await this.tagModel
-            .find({_id: {$in: createdThread.tags}})
-            .distinct('_id')
+        const existingTags = await this.tagModel
+            .find({name: {$in: createThreadDto.tags}})
             .exec();
 
-        if (createdThread.tags && existingTagIds.length !== createdThread.tags.length) {
+        if (createdThread.tags && existingTags.length !== createdThread.tags.length) {
             throw new BadRequestException(
                 'One or more tags specified in the create request do not exist',
             );
@@ -51,12 +50,11 @@ export class ThreadService {
             throw new NotFoundException(`Thread with ID ${id} not found`);
         }
 
-        const existingTagIds = await this.tagModel
-            .find({_id: {$in: updateThreadDto.tags}})
-            .distinct('_id')
+        const existingTags = await this.tagModel
+            .find({name: {$in: updateThreadDto.tags}})
             .exec();
 
-        if (updateThreadDto.tags && existingTagIds.length !== updateThreadDto.tags.length) {
+        if (updateThreadDto.tags && existingTags.length !== updateThreadDto.tags.length) {
             throw new BadRequestException('One or more tags specified in the create request do not exist');
         }
 

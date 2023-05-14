@@ -14,11 +14,11 @@ export class Thread {
     @Prop()
     description: string;
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tag'}], default: []})
-    tags: Tag[];
+    @Prop({default: []})
+    tags: string[];
 
-    @Prop()
-    creationDate: string;
+    @Prop({ default: new Date() })
+    creationDate: Date;
 
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
     author: User['_id'];
