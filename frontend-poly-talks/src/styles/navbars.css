@@ -4,7 +4,7 @@
 }
 
 .appBar {
-    position: sticky;
+    position: sticky !important;
     display: flex;
     flex-direction: row !important;
     justify-content: space-between;

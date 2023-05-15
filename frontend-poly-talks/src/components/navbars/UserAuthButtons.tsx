@@ -5,6 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import { NavLink } from 'react-router-dom';
 import './../../styles/navbars.css';
 import { AuthContext, decodeToken } from '../../authentication/Authentication';
+import { createUser } from '../../services/UserApiService';
 
 const useStyles = makeStyles()({
   container: {
@@ -26,6 +27,9 @@ export const UserAuthButtons = () => {
 
   useEffect(() => {
     if(token?.credential){
+      createUser({
+        token: token.credential
+      })
       localStorage.setItem("token", token.credential);
       setCurrentUser(decodeToken(token.credential));
     }else{
