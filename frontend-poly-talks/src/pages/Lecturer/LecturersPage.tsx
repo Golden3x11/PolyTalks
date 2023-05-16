@@ -1,5 +1,5 @@
 import React from "react";
-import {LecturerDto} from "../dto/lecturer.dto";
+import {LecturerDto} from "../../dto/lecturer.dto";
 import {makeStyles} from "tss-react/mui";
 import {Divider, List} from "@mui/material";
 import {Link} from "react-router-dom";

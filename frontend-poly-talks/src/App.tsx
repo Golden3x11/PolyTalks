@@ -6,16 +6,17 @@ import {Sidebar} from './components/navbars/Sidebar';
 import {Header} from './components/navbars/Header';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {CoursesPage} from './pages/CoursesPage';
-import {LecturersPage} from './pages/LecturersPage';
+import {LecturersPage} from './pages/Lecturer/LecturersPage';
 import {FavouritesPage} from './pages/FavouritesPage';
 import {TrendingPage} from './pages/TrendingPage';
 import {ThreadsPage} from './pages/ThreadsPage';
 import {CreateCoursePage} from './pages/CreateCoursePage';
-import {CreateLecturerPage} from './pages/CreateLecturerPage';
+import {CreateLecturerPage} from './pages/Lecturer/CreateLecturerPage';
 import {CreateThreadPage} from './pages/CreateThreadPage';
 import {UserPage} from './pages/UserPage';
 import {AuthContext, DecodedToken} from './authentication/Authentication';
 import {SingleThread} from "./pages/SingleThread";
+import {SingleLecturerPage} from "./pages/Lecturer/SingleLecturerPage";
 
 const theme = createTheme({
   palette: {
@@ -46,13 +47,14 @@ function App() {
               <Routes>
                 <Route path={'/'} Component={TrendingPage}></Route>
                 <Route path={'/favourites'} Component={FavouritesPage}></Route>
-                <Route path={'/courses'} Component={CoursesPage}></Route>
-                <Route path={'/lecturers'} Component={LecturersPage}></Route>
                 <Route path={'/threads'} Component={ThreadsPage}></Route>
-                <Route path={'/threads/:id'} Component={SingleThread}></Route>
-                <Route path={'/courses/create'} Component={CreateCoursePage}></Route>
-                <Route path={'/lecturers/create'} Component={CreateLecturerPage}></Route>
                 <Route path={'/threads/create'} Component={CreateThreadPage}></Route>
+                <Route path={'/threads/:id'} Component={SingleThread}></Route>
+                <Route path={'/courses'} Component={CoursesPage}></Route>
+                <Route path={'/courses/create'} Component={CreateCoursePage}></Route>
+                <Route path={'/lecturers'} Component={LecturersPage}></Route>
+                <Route path={'/lecturers/create'} Component={CreateLecturerPage}></Route>
+                <Route path="/lecturer/:id" Component={SingleLecturerPage}></Route>
                 <Route path={'/user'} Component={UserPage}></Route>
               </Routes>
             </div>
