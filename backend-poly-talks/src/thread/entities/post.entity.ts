@@ -10,16 +10,16 @@ export class Post {
     @Prop({required: true})
     _id: string;
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
-    author: User['_id'];
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null })
+    author: User;
 
     @Prop()
     content: string;
 
-    @Prop()
-    creationDate: string;
+    @Prop({ default: new Date() })
+    creationDate: Date;
 
-    @Prop({ type: [PostSchema], default: [] })
+    @Prop({ type: [], default: []})
     comments: Post[];
 }
 

@@ -6,6 +6,8 @@ import {Thread, ThreadSchema} from "./entities/thread.entity";
 import {TagModule} from "../tag/tag.module";
 import { MailService } from './mail/mail.service';
 import {MailerModule} from "@nestjs-modules/mailer";
+import {UserService} from "../user/user.service";
+import {UserModule} from "../user/user.module";
 
 @Module({
     imports: [
@@ -24,7 +26,8 @@ import {MailerModule} from "@nestjs-modules/mailer";
                 },
             }
         }),
-        TagModule
+        TagModule,
+        UserModule
     ],
     controllers: [ThreadController],
     providers: [ThreadService, MailService],

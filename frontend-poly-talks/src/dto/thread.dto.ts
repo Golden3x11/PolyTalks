@@ -1,3 +1,5 @@
+import {UserDto} from "./user.dto";
+
 export interface ThreadDto{
     _id: string,
     title: string,
@@ -6,4 +8,5 @@ export interface ThreadDto{
     creationDate: Date,
     posts: [],
     subscribers: string[],
+    author: UserDto
 }

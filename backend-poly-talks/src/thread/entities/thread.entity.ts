@@ -1,7 +1,7 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import mongoose, {Document} from 'mongoose';
 import {Post, PostSchema} from "./post.entity";
-import {User} from "../../user/entities/user.entity";
+import {User, UserSchema} from "../../user/entities/user.entity";
 import {Tag} from "../../tag/entities/tag.entity";
 
 export type ThreadDocument = Thread & Document;
@@ -20,8 +20,8 @@ export class Thread {
     @Prop({ default: new Date() })
     creationDate: Date;
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
-    author: User['_id'];
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null })
+    author: User;
 
     @Prop({type: [PostSchema], default: []})
     posts: Post[];

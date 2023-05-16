@@ -23,6 +23,10 @@ export function getDecodedToken(){
   return token ? jwtDecode<DecodedToken>(token) : null;
 }
 
+export function getToken(){
+  return  localStorage.getItem("token");
+}
+
 export function decodeToken(token: string): DecodedToken {
   return jwtDecode<DecodedToken>(token);
 }

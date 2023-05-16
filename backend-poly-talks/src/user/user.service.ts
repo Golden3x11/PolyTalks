@@ -25,12 +25,13 @@ export class UserService {
         })
     }
 
-    async findOne(userTokenDto: UserTokenDto) {
+    async findOne(userTokenDto: UserTokenDto): Promise<User> {
         const email = (await decodeToken(userTokenDto.token)).email
-        return this.userModel.findOne({"email": email}).exec().then(user => {
-            if(!user)
-                throw new NotFoundException(`User with email ${email} not found`);
-        })
+        const user = await this.userModel.findOne({"email": email}).exec()
+        if(!user){
+            throw new NotFoundException(`User with email ${email} not found`);
+        }
+        return user;
     }
 
     async update(updateUserDto: UpdateUserDto) {
