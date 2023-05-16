@@ -1,0 +1,33 @@
+.rating-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.rating-title {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.rating-user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.user-icon {
+    margin-right: 8px;
+}
+
+.rating-description {
+    margin-bottom: 16px;
+}
+
+.rating-table {
+    width: 100%;
+}
+
+.rating-table td {
+    padding: 4px 0;
+}
