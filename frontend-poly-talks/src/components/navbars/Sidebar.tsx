@@ -36,6 +36,7 @@ export const Sidebar = () => {
     <Stack
       className={cx(classes.container)}
       spacing={outerStackSpacing}
+      style={{background: "rgb(242 242 242)"}}
     >
       <Stack spacing={innerStacksSpacing}>
         <Typography className={`${classes.firstChild} ${classes.header}`}>Tematy</Typography>

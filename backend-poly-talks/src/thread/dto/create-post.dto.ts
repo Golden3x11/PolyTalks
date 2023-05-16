@@ -3,7 +3,7 @@ import {IsArray, IsNotEmpty, IsOptional, IsString} from "class-validator";
 export class CreatePostDto {
     @IsNotEmpty()
     @IsString()
-    author: string;
+    userToken: string;
 
     @IsNotEmpty()
     @IsString()

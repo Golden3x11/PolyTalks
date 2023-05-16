@@ -18,6 +18,10 @@ export class CreateThreadDto {
     @IsDate()
     creationDate: Date;
 
+    @IsNotEmpty()
+    @IsString()
+    userToken: string;
+
     @IsArray()
     @ValidateNested({each: true})
     @Type(() => CreatePostDto)

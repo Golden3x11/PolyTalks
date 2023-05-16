@@ -43,7 +43,7 @@ function App() {
 
             <Sidebar />
 
-            <div style={{ marginLeft: '15%', position: 'relative', height: '93%' }}>
+            <div style={{ marginLeft: '15%', position: 'relative', height: '93%', background: "rgb(242 242 242)" }}>
               <Routes>
                 <Route path={'/'} Component={TrendingPage}></Route>
                 <Route path={'/favourites'} Component={FavouritesPage}></Route>

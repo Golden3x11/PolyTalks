@@ -7,17 +7,20 @@ import mongoose, {Model} from "mongoose";
 import {Tag, TagDocument} from "../tag/entities/tag.entity";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {UpdatePostDto} from "./dto/update-post.dto";
-import {Post} from "./entities/post.entity";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class ThreadService {
     constructor(@InjectModel(Thread.name) private threadModel: Model<ThreadDocument>,
-                @InjectModel(Tag.name) private tagModel: Model<TagDocument>
-                ) {
+                @InjectModel(Tag.name) private tagModel: Model<TagDocument>,
+                private readonly userService: UserService) {
     }
 
     async create(createThreadDto: CreateThreadDto): Promise<Thread> {
-        const createdThread = new this.threadModel(createThreadDto);
+        const {userToken, ...course} = createThreadDto;
+        const createdThread = new this.threadModel(course);
+
+        createdThread.author = await this.userService.findOne({token: userToken})
 
         const existingTags = await this.tagModel
             .find({name: {$in: createThreadDto.tags}})
@@ -37,7 +40,11 @@ export class ThreadService {
     }
 
     async findById(id: string): Promise<Thread> {
-        const thread = await this.threadModel.findById(id).populate('tags').populate('author').exec();
+        const thread = await this.threadModel.findById(id)
+            .populate('tags')
+            .populate('author')
+            .populate('posts.author')
+            .exec();
         if (!thread) {
             throw new NotFoundException(`Thread with ID ${id} not found`);
         }
@@ -78,6 +85,8 @@ export class ThreadService {
     }
 
     async addPostToThread(threadId: string, createPostDto: CreatePostDto): Promise<Thread> {
+        const {userToken, ...createPost} = createPostDto;
+
         const thread = await this.threadModel.findById(threadId);
         if (!thread) {
             throw new NotFoundException(`Thread with ID ${threadId} not found`);
@@ -85,8 +94,10 @@ export class ThreadService {
 
         const post = {
             _id: new mongoose.Types.ObjectId().toHexString(),
-            ...createPostDto,
-            comments: []
+            ...createPost,
+            author: await this.userService.findOne({token: userToken}),
+            comments: [],
+            creationDate: new Date()
         };
 
         thread.posts.push(post);
@@ -129,10 +140,6 @@ export class ThreadService {
             post.content = updatePostDto.content;
         }
 
-        if (updatePostDto.creationDate) {
-            post.creationDate = updatePostDto.creationDate;
-        }
-
         await thread.save();
         return thread;
     }
@@ -142,6 +149,7 @@ export class ThreadService {
         if (!thread) {
             throw new NotFoundException(`Thread with id ${threadId} not found`);
         }
+        const {userToken, ...createPost} = createPostDto;
 
         const post = thread.posts.find(post  => post._id.toString() === postId);
         if (!post) {
@@ -150,8 +158,10 @@ export class ThreadService {
 
         const comment = {
             _id: new mongoose.Types.ObjectId().toHexString(),
-            ...createPostDto,
-            comments: []
+            ...createPost,
+            author: await this.userService.findOne({token: userToken}),
+            comments: [],
+            creationDate: new Date()
         };
 
         post.comments.push(comment)

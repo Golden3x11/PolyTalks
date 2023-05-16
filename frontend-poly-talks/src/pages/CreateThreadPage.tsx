@@ -11,10 +11,10 @@ import {
     TextField
 } from '@mui/material';
 import {makeStyles} from "tss-react/mui";
-import React, {useEffect} from "react";
-import * as http from "http";
+import React, {useContext, useEffect} from "react";
 import {TagDto} from "../dto/tag.dto";
 import {AddTagDialog} from "../components/AddTagDialog";
+import {getToken} from "../authentication/Authentication";
 
 
 const ITEM_HEIGHT = 48;
@@ -53,7 +53,6 @@ export const CreateThreadPage = () => {
     const [description, setDescription] = React.useState("");
     const [tagsList, setTagsList] = React.useState<string[]>([]);
     const [isAddTagDialogOpen, setIsAddTagDialogOpen] = React.useState(false);
-
 
     React.useEffect(() => {
         fetch('http://localhost:8080/api/tag')
@@ -102,7 +101,8 @@ export const CreateThreadPage = () => {
             body: JSON.stringify({
                 title: topic,
                 description: description,
-                tags: tags
+                tags: tags,
+                userToken: getToken()
             }),
         })
             .then(response => response.json())
