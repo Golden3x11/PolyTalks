@@ -26,7 +26,7 @@ export const ThreadsPage = () => {
 
 
     return (
-        <div style={{margin: '1em 2em', display: 'flex', flexDirection: 'column', gap: '0.3em'}}>
+        <div style={{margin: '0 2em', display: 'flex', flexDirection: 'column', gap: '0.3em'}}>
             <h1 className={`${classes.red}`} style={{fontWeight: 'bold'}}>Wątki</h1>
             <List component="nav">
                 {threads.map(thread => (<>
