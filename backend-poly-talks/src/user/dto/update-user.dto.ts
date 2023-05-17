@@ -9,4 +9,8 @@ export class UpdateUserDto extends UserTokenDto {
   @IsNotEmpty()
   @IsString()
   username: string
+
+  @IsNotEmpty()
+  @IsString()
+  token: string
 }

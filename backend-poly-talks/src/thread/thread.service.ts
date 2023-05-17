@@ -20,7 +20,7 @@ export class ThreadService {
         const {userToken, ...course} = createThreadDto;
         const createdThread = new this.threadModel(course);
 
-        createdThread.author = await this.userService.findOne({token: userToken})
+        createdThread.author = await this.userService.findOne(userToken)
 
         const existingTags = await this.tagModel
             .find({name: {$in: createThreadDto.tags}})
@@ -95,7 +95,7 @@ export class ThreadService {
         const post = {
             _id: new mongoose.Types.ObjectId().toHexString(),
             ...createPost,
-            author: await this.userService.findOne({token: userToken}),
+            author: await this.userService.findOne(userToken),
             comments: [],
             creationDate: new Date()
         };
@@ -159,7 +159,7 @@ export class ThreadService {
         const comment = {
             _id: new mongoose.Types.ObjectId().toHexString(),
             ...createPost,
-            author: await this.userService.findOne({token: userToken}),
+            author: await this.userService.findOne(userToken),
             comments: [],
             creationDate: new Date()
         };

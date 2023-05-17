@@ -12,7 +12,7 @@ export class UserService {
       @InjectModel(User.name) private userModel: Model<UserDocument>
     ) {}
 
-    async create(userTokenDto: UserTokenDto) {
+    async create(userTokenDto: UserTokenDto): Promise<User> {
         const decodedToken = await decodeToken(userTokenDto.token)
 
         return this.userModel.findOne({"email": decodedToken.email}).exec().then(user => {
@@ -25,8 +25,8 @@ export class UserService {
         })
     }
 
-    async findOne(userTokenDto: UserTokenDto): Promise<User> {
-        const email = (await decodeToken(userTokenDto.token)).email
+    async findOne(token: string): Promise<User> {
+        const email = (await decodeToken(token)).email
         const user = await this.userModel.findOne({"email": email}).exec()
         if(!user){
             throw new NotFoundException(`User with email ${email} not found`);
@@ -34,7 +34,7 @@ export class UserService {
         return user;
     }
 
-    async update(updateUserDto: UpdateUserDto) {
+    async update(updateUserDto: UpdateUserDto): Promise<User> {
         const email = (await decodeToken(updateUserDto.token)).email
 
         return this.userModel.findOneAndUpdate(

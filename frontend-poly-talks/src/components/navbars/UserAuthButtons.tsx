@@ -61,7 +61,10 @@ export const UserAuthButtons = () => {
           Logout
         </Button>
         <NavLink to={"/user"}>
-          <Avatar className={cx(classes.margin)} />
+          <Avatar
+            className={cx(classes.margin)}
+            src={`/avatar-1.jpg`}
+          />
         </NavLink>
       </>
       }

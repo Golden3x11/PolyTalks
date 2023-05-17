@@ -17,6 +17,7 @@ import {UserPage} from './pages/UserPage';
 import {AuthContext, DecodedToken} from './authentication/Authentication';
 import {SingleThread} from "./pages/SingleThread";
 import {SingleLecturerPage} from "./pages/Lecturer/SingleLecturerPage";
+import { SnackbarProvider } from 'notistack';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,7 @@ function App() {
     <AuthContext.Provider value={{currentUser, setCurrentUser}}>
       <GoogleOAuthProvider clientId={'407712005402-sumiqjgamkhccs0flh9o6p26gijrmepn.apps.googleusercontent.com'}>
         <ThemeProvider theme={theme}>
+          <SnackbarProvider />
           <BrowserRouter>
 
             <CssBaseline />
