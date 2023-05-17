@@ -1,8 +1,8 @@
 import { Avatar, Button, IconButton, Stack, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { getToken } from '../authentication/Authentication';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext, getToken } from '../authentication/Authentication';
 import { UserDto } from '../dto/user.dto';
-import { getUser, updateUser } from '../services/UserApiService';
+import { updateUser } from '../services/UserApiService';
 import { enqueueSnackbar } from 'notistack';
 import { useNavigate } from 'react-router';
 import { makeStyles } from 'tss-react/mui';
@@ -33,19 +33,15 @@ export const UserPage = () => {
   const { classes } = useStyles(undefined, undefined);
   const [user, setUser] = useState<UserDto | undefined>();
   const navigate = useNavigate();
+  const {currentUser, setCurrentUser} = useContext(AuthContext)
 
   useEffect(() => {
-    const token = getToken();
-
-    if (!token) {
+    if (!getToken()) {
       enqueueSnackbar('Zaloguj się kontem Google');
       navigate('/');
     }
-
-    getUser(token!!)
-      .then(setUser)
-      .catch((err) => enqueueSnackbar(err.message));
-  }, [navigate]);
+    setUser(currentUser)
+  }, [currentUser, navigate]);
 
   const handleUserUpdate = (newUser: UserDto) => {
     updateUser({
@@ -53,7 +49,10 @@ export const UserPage = () => {
       avatar: newUser.avatar,
       token: getToken()!!,
     })
-      .then(setUser)
+      .then((updatedUser) => {
+        setUser(updatedUser);
+        setCurrentUser(updatedUser);
+      })
       .catch((err) => {
         console.log(err);
         enqueueSnackbar('Nie udało się zaktualizować danych użytkownika');

@@ -1,23 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import {GoogleOAuthProvider} from '@react-oauth/google';
-import {createTheme, CssBaseline, ThemeProvider} from '@mui/material';
-import {Sidebar} from './components/navbars/Sidebar';
-import {Header} from './components/navbars/Header';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {CoursesPage} from './pages/CoursesPage';
-import {LecturersPage} from './pages/Lecturer/LecturersPage';
-import {FavouritesPage} from './pages/FavouritesPage';
-import {TrendingPage} from './pages/TrendingPage';
-import {ThreadsPage} from './pages/ThreadsPage';
-import {CreateCoursePage} from './pages/CreateCoursePage';
-import {CreateLecturerPage} from './pages/Lecturer/CreateLecturerPage';
-import {CreateThreadPage} from './pages/CreateThreadPage';
-import {UserPage} from './pages/UserPage';
-import {AuthContext, DecodedToken} from './authentication/Authentication';
-import {SingleThread} from "./pages/SingleThread";
-import {SingleLecturerPage} from "./pages/Lecturer/SingleLecturerPage";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Sidebar } from './components/navbars/Sidebar';
+import { Header } from './components/navbars/Header';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CoursesPage } from './pages/CoursesPage';
+import { LecturersPage } from './pages/Lecturer/LecturersPage';
+import { FavouritesPage } from './pages/FavouritesPage';
+import { TrendingPage } from './pages/TrendingPage';
+import { ThreadsPage } from './pages/ThreadsPage';
+import { CreateCoursePage } from './pages/CreateCoursePage';
+import { CreateLecturerPage } from './pages/Lecturer/CreateLecturerPage';
+import { CreateThreadPage } from './pages/CreateThreadPage';
+import { UserPage } from './pages/UserPage';
+import { AuthContext } from './authentication/Authentication';
+import { SingleThread } from './pages/SingleThread';
+import { SingleLecturerPage } from './pages/Lecturer/SingleLecturerPage';
 import { SnackbarProvider } from 'notistack';
+import { UserDto } from './dto/user.dto';
 
 const theme = createTheme({
   palette: {
@@ -31,7 +32,7 @@ const theme = createTheme({
 });
 
 function App() {
-  const [currentUser, setCurrentUser] = useState<DecodedToken | undefined>(undefined);
+  const [currentUser, setCurrentUser] = useState<UserDto | undefined>(undefined);
 
   return (
     <AuthContext.Provider value={{currentUser, setCurrentUser}}>

@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserTokenDto } from './dto/user-token.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -17,7 +17,7 @@ export class UserService {
 
         return this.userModel.findOne({"email": decodedToken.email}).exec().then(user => {
             if(user){
-                throw new ConflictException("User has already created an account")
+                return user;
             }else{
                 const newUser = new this.userModel({"username": decodedToken.name, "email": decodedToken.email, "avatar": 1})
                 return newUser.save()

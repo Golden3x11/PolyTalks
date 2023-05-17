@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import React, { createContext } from 'react';
+import { UserDto } from '../dto/user.dto';
 // token is stored both in localStorage (to use in services) and in react context (to use state for rerenders)
 export const AuthContext = createContext<CurrentUser>({
   currentUser: undefined,
@@ -7,8 +8,8 @@ export const AuthContext = createContext<CurrentUser>({
 })
 
 export interface CurrentUser {
-  currentUser: DecodedToken | undefined;
-  setCurrentUser: React.Dispatch<React.SetStateAction<DecodedToken | undefined>>;
+  currentUser: UserDto | undefined;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserDto | undefined>>;
 }
 
 export function getLoggedInEmail(){
