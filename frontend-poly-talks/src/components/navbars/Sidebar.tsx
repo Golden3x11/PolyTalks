@@ -10,10 +10,9 @@ import './../../styles/navbars.css';
 
 const useStyles = makeStyles()((theme) => ({
   container: {
-    borderRight: '3px solid grey',
     position: "fixed",
     alignSelf: "self-start",
-    width: "15%",
+    width: "18%",
     padding: "1%",
     top: "0",
     height: "100%"
@@ -36,7 +35,7 @@ export const Sidebar = () => {
     <Stack
       className={cx(classes.container)}
       spacing={outerStackSpacing}
-      style={{background: "rgb(242 242 242)"}}
+      style={{background: "rgb(198 196 196)"}}
     >
       <Stack spacing={innerStacksSpacing}>
         <Typography className={`${classes.firstChild} ${classes.header}`}>Tematy</Typography>
