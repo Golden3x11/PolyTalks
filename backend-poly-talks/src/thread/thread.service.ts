@@ -44,6 +44,7 @@ export class ThreadService {
             .populate('tags')
             .populate('author')
             .populate('posts.author')
+            .populate('posts.comments.author')
             .exec();
         if (!thread) {
             throw new NotFoundException(`Thread with ID ${id} not found`);
@@ -144,7 +145,7 @@ export class ThreadService {
         return thread;
     }
 
-    async addCommentToPost(threadId: string, postId: string, createPostDto: CreatePostDto): Promise<Thread>{
+    async addCommentToPost(threadId: string, postId: string, createPostDto: CreatePostDto): Promise<Comment>{
         const thread = await this.threadModel.findById(threadId);
         if (!thread) {
             throw new NotFoundException(`Thread with id ${threadId} not found`);
@@ -160,12 +161,12 @@ export class ThreadService {
             _id: new mongoose.Types.ObjectId().toHexString(),
             ...createPost,
             author: await this.userService.findOne(userToken),
-            comments: [],
             creationDate: new Date()
         };
 
         post.comments.push(comment)
+        await thread.save()
 
-        return  thread.save()
+        return comment as unknown as Comment
     }
 }

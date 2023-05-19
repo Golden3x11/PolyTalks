@@ -52,7 +52,7 @@ export class ThreadController {
     }
 
     @Post(':threadId/posts/:postId')
-    async addCommentToPost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() createPostDto: CreatePostDto,): Promise<Thread> {
+    async addCommentToPost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() createPostDto: CreatePostDto,): Promise<Comment> {
         return this.threadService.addCommentToPost(threadId, postId, createPostDto);
     }
 }

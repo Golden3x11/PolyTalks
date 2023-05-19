@@ -32,7 +32,7 @@ export const SingleLecturerPage = () => {
     }, [id]);
 
     return (
-        <div style={{margin: '0.3em 4em', display: 'flex', flexDirection: 'column'}}>
+        <div style={{margin: '0 4em', display: 'flex', flexDirection: 'column'}}>
             <p className={`${classes.red}`}
                style={{fontSize: 45, fontWeight: 'bold', marginBottom: 0, marginTop: '0.5em'}}>{lecturer?.surname}</p>
             <p className={`${classes.red}`} style={{fontSize: 30, marginTop: 0, marginBottom: 0}}>{lecturer?.name}</p>

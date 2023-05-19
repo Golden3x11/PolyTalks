@@ -68,13 +68,17 @@ export const SingleThread = () => {
     };
 
     return (
-        <div style={{padding: '1em 2em', display: 'flex', flexDirection: 'column', gap: '0.15em'}}>
+        <div style={{padding: '1em 2em', paddingBottom: '4em', display: 'flex', flexDirection: 'column', gap: '0.15em'}}>
+            <Button
+                variant="contained"
+                style={{position: "fixed", bottom: "20px", right: "20px"}}
+                onClick={() => {window.scrollTo(0,0)}}
+            >Powrót do góry</Button>
             <Card style={{ boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.32), 0px 1px 1px 0px rgba(0,0,0,0.32), 0px 1px 3px 0px rgba(0,0,0,0.28)"}} >
                 <CardContent>
                     <div>
                         <h1 className={`${classes.red}`}
                             style={{fontWeight: 'bold', marginBottom: "0px"}}>{thread?.title}</h1>
-                        {/*<h4 style={{marginTop: "0px"}}>@{thread?.author?.username}</h4>*/}
                     </div>
                     <Stack direction="row" spacing={1}>
                         {thread?.tags.map(tag => (
@@ -108,7 +112,7 @@ export const SingleThread = () => {
             <h3 className={`${classes.red}`} style={{marginTop: "2.5em"}}>Posty: </h3>
             <div style = {{display: "flex", flexDirection: "column", gap: "1em"}}>
                 {thread?.posts.map(post => (
-                        <Post post={post}/>
+                        <Post post={post} isComment={false} threadId={thread._id}/>
                     )
                 )}
             </div>
