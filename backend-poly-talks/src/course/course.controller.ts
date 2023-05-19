@@ -4,6 +4,7 @@ import {UpdateCourseDto} from './dto/update-course.dto';
 import {Course} from "./entities/course.entity";
 import {CreateCourseDto} from "./dto/create-course.dto";
 import {CreateAttachmentDto} from "./dto/crate-attachment.dto";
+import {Attachment} from "./entities/attachment.entity";
 
 @Controller('api/course')
 export class CourseController {
@@ -33,6 +34,11 @@ export class CourseController {
     @Delete(':id')
     async remove(@Param('id') id: string): Promise<Course> {
         return this.courseService.delete(id);
+    }
+
+    @Get(':id/attachments')
+    async getAttachment(@Param('id') courseId: string): Promise<Attachment[]> {
+        return this.courseService.getAttachments(courseId);
     }
 
     @Post(':id/attachments')

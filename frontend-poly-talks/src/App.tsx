@@ -19,6 +19,8 @@ import { SingleThread } from './pages/SingleThread';
 import { SingleLecturerPage } from './pages/Lecturer/SingleLecturerPage';
 import { SnackbarProvider } from 'notistack';
 import { UserDto } from './dto/user.dto';
+import {SingleCourse} from "./pages/SingleCourse";
+import {CourseAttachments} from "./pages/CourseAttachments";
 
 const theme = createTheme({
   palette: {
@@ -54,6 +56,8 @@ function App() {
                 <Route path={'/threads/create'} Component={CreateThreadPage}></Route>
                 <Route path={'/threads/:id'} Component={SingleThread}></Route>
                 <Route path={'/courses'} Component={CoursesPage}></Route>
+                <Route path={'/courses/:id'} Component={SingleCourse}></Route>
+                <Route path={'/courses/:id/attachments'} Component={CourseAttachments}></Route>
                 <Route path={'/courses/create'} Component={CreateCoursePage}></Route>
                 <Route path={'/lecturers'} Component={LecturersPage}></Route>
                 <Route path={'/lecturers/create'} Component={CreateLecturerPage}></Route>

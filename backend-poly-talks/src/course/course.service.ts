@@ -6,6 +6,7 @@ import {CreateCourseDto} from './dto/create-course.dto';
 import {UpdateCourseDto} from './dto/update-course.dto';
 import {CreateAttachmentDto} from "./dto/crate-attachment.dto";
 import {Lecturer, LecturerDocument} from "../lecturer/entities/lecturer.entity";
+import {Attachment} from "./entities/attachment.entity";
 
 @Injectable()
 export class CourseService {
@@ -33,7 +34,7 @@ export class CourseService {
         return this.courseModel
             .find()
             .populate('lecturers')
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
     }
 
@@ -41,7 +42,7 @@ export class CourseService {
         const course = await this.courseModel
             .findById(id)
             .populate('lecturers')
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
@@ -72,20 +73,35 @@ export class CourseService {
         };
         return this.courseModel
             .findByIdAndUpdate(id, updatedCourse, {new: true})
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
     }
 
     async delete(id: string): Promise<Course> {
         const course = await this.courseModel
             .findByIdAndDelete(id)
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
 
         if (!course) {
             throw new NotFoundException(`Course with ID ${id} not found`);
         }
         return course;
+    }
+
+    async getAttachments(courseId: string): Promise<Attachment[]> {
+        const course = await this.courseModel.findById(courseId).exec();
+        if (!course) {
+            throw new NotFoundException(`Course with ID ${courseId} not found`);
+        }
+
+
+        const courseV = await this.courseModel
+            .findById(courseId)
+            .select('-attachments.value')
+            .exec();
+
+        return courseV.attachments;
     }
 
     async addAttachment(courseId: string, attachment: CreateAttachmentDto): Promise<Course> {
@@ -105,7 +121,7 @@ export class CourseService {
         return this.courseModel
             .findById(courseId)
             .populate('lecturers')
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
     }
 
@@ -133,7 +149,7 @@ export class CourseService {
         return this.courseModel
             .findById(courseId)
             .populate('lecturers')
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
     }
 
@@ -171,7 +187,7 @@ export class CourseService {
         return this.courseModel
             .findById(courseId)
             .populate('lecturers')
-            .select('-attachments.value')
+            .select('-attachments')
             .exec();
     }
 

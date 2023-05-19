@@ -27,7 +27,7 @@ export const CoursesPage = () => {
             <h1 className={`${classes.red}`} style={{fontWeight: 'bold'}}>Kursy</h1>
             <List component="nav">
                 {courses.map(course => (<>
-                        <Link to={`/course/${course._id}`}>
+                        <Link style={{textDecoration: "none", color: "black"}} to={`/courses/${course._id}`}>
                             <h3>{course.name} {course.code}</h3>
                         </Link>
                         <Divider/>

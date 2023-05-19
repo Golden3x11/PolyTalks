@@ -30,7 +30,7 @@ export const ThreadsPage = () => {
             <h1 className={`${classes.red}`} style={{fontWeight: 'bold'}}>Wątki</h1>
             <List component="nav">
                 {threads.map(thread => (<>
-                        <Link to={`/threads/${thread._id}`}>
+                        <Link style={{textDecoration: "none", color: "black"}} to={`/threads/${thread._id}`}>
                             <h3>{thread.title}</h3>
                             <p>{thread.description}</p>
                         </Link>

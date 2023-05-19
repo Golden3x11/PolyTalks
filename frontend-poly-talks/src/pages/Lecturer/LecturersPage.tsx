@@ -27,7 +27,7 @@ export const LecturersPage = () => {
             <h1 className={`${classes.red}`} style={{fontWeight: 'bold'}}>Prowadzący</h1>
             <List component="nav">
                 {lecturers.map(lecturer => (<>
-                        <Link to={`/lecturer/${lecturer._id}`}>
+                        <Link style={{textDecoration: "none", color: "black"}} to={`/lecturer/${lecturer._id}`}>
                             <h3>{lecturer.name} {lecturer.surname}</h3>
                         </Link>
                         <Divider/>
