@@ -6,6 +6,7 @@ import {Button, Card, CardContent, Chip, Stack, TextField} from "@mui/material";
 import {SendRounded} from "@mui/icons-material";
 import {getToken} from "../authentication/Authentication";
 import {Post} from "../components/Post";
+import {enqueueSnackbar} from "notistack";
 
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,6 +47,10 @@ export const SingleThread = () => {
     }
 
     const createPost = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         fetch(`http://localhost:8080/api/thread/${thread?._id}/posts`, {
             method: 'POST',
             headers: {

@@ -14,6 +14,7 @@ import React, {useState} from "react";
 import {makeStyles} from "tss-react/mui";
 import {PostDto} from "../dto/post.dto";
 import {getToken} from "../authentication/Authentication";
+import {enqueueSnackbar} from "notistack";
 
 const useStyles = makeStyles()((theme) => ({
     red: {
@@ -41,6 +42,10 @@ export const Post = ({ post, isComment, threadId }: { post: PostDto, isComment: 
     }
 
     const createComment = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         fetch(`http://localhost:8080/api/thread/${threadId}/posts/${post?._id}`, {
             method: 'POST',
             headers: {
