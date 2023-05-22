@@ -1,9 +1,12 @@
+import {UserDto} from "./user.dto";
+
 export interface RatingDto {
-    author: string;
+    author: UserDto;
     title: string;
     description: string;
     rating_difficulty: number;
     rating_knowledge: number;
     rating_communication: number;
     rating_friendliness: number;
+    creationDate: Date;
 }

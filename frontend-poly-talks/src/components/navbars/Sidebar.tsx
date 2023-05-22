@@ -51,7 +51,7 @@ export const Sidebar = () => {
       </Stack>
 
       <Stack spacing={innerStacksSpacing}>
-        <Typography className={classes.header}>Utwórz</Typography>
+        <Typography className={classes.header}>Dodaj</Typography>
         <IconText text={"Kurs"} Icon={MenuBookIcon} route={"/courses/create"}/>
         <IconText text={"Prowadzącego"} Icon={PersonIcon} route={"/lecturers/create"}/>
         <IconText text={"Wątek"} Icon={TagIcon} route={"/threads/create"}/>

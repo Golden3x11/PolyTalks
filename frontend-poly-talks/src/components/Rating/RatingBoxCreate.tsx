@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {StarRating} from './StarRating';
 import {Button, TextField} from "@mui/material";
 import {makeStyles} from "tss-react/mui";
+import {getToken} from "../../authentication/Authentication";
+import {enqueueSnackbar} from "notistack";
 
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,10 +21,11 @@ const useStyles = makeStyles()((theme) => ({
 
 interface RatingBoxCreateProps {
     id: string | undefined;
+    handleRatingCreated: any;
 }
 
-export const RatingBoxCreate = (props : RatingBoxCreateProps) => {
-    const { id } = props;
+export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
+    const {id, handleRatingCreated} = props;
     const {classes, cx} = useStyles(undefined, undefined);
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
@@ -50,6 +53,10 @@ export const RatingBoxCreate = (props : RatingBoxCreateProps) => {
     }
 
     const addRating = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         const url = "http://localhost:8080/api/lecturer/" + id + "/ratings";
         fetch(url, {
             method: 'POST',
@@ -62,19 +69,20 @@ export const RatingBoxCreate = (props : RatingBoxCreateProps) => {
                 rating_difficulty: ratingValues.difficulty,
                 rating_knowledge: ratingValues.knowledge,
                 rating_communication: ratingValues.communication,
-                rating_friendliness: ratingValues.friendliness
+                rating_friendliness: ratingValues.friendliness,
+                userToken: getToken()
             }),
         })
             .then(response => response.json())
             .then(data => {
                 console.log('Rating added successfully:', data);
+                handleRatingCreated();
             })
             .catch(error => console.error('Error while adding rating:', error));
     };
 
     return (
         <div>
-            <p style={{fontSize: 17}}>Podziel się z nami opinią na temat prowadzącego :)</p>
             <table style={{width: '100%', borderCollapse: 'collapse'}}>
                 <thead>
                 <tr>
@@ -146,11 +154,11 @@ export const RatingBoxCreate = (props : RatingBoxCreateProps) => {
                 </tbody>
             </table>
             <div>
-                <h2 className={classes.red}>Tytuł</h2>
+                <h2 className={classes.red}>Ocena słowna</h2>
                 <TextField
                     className={classes.textInput}
                     id="outlined-basic"
-                    label="Wpisz jakiś tytuł"
+                    label="Napisz ocenę słowną"
                     variant="outlined"
                     required
                     value={title}
@@ -177,8 +185,8 @@ export const RatingBoxCreate = (props : RatingBoxCreateProps) => {
                 variant="contained"
                 style={{fontSize: "1.15rem", alignSelf: "flex-end", marginTop: "1em"}}
                 disabled={title === "" || description === "" || ratingValues.knowledge === 0
-                || ratingValues.friendliness === 0 || ratingValues.communication === 0
-                || ratingValues.difficulty === 0}
+                    || ratingValues.friendliness === 0 || ratingValues.communication === 0
+                    || ratingValues.difficulty === 0}
                 onClick={addRating}
             >
                 Dodaj opinię

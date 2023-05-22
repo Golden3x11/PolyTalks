@@ -8,8 +8,11 @@ export class Rating {
     @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
     _id: mongoose.Types.ObjectId;
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: null})
-    author: User['_id'];
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null })
+    author: User;
+
+    @Prop({ default: new Date() })
+    creationDate: Date;
 
     @Prop()
     title: string;
