@@ -4,6 +4,7 @@ import {useParams} from "react-router";
 import {CourseDto} from "../dto/course.dto";
 import {Button, Card, CardContent} from "@mui/material";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import {useNavigate} from "react-router-dom";
 
 const useStyles = makeStyles()((theme) => ({
     red: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SingleCourse = () => {
     const {classes, cx} = useStyles(undefined, undefined);
     const [course, setCourse] = React.useState<CourseDto | null>(null);
-
+    const navigate = useNavigate();
     const {id} = useParams();
 
     React.useEffect(() => {
@@ -50,7 +51,7 @@ export const SingleCourse = () => {
                             <h3 className={`${classes.red}`} style={{fontWeight: 'bold', margin: "0"}}>{course?.major}</h3>
                         </div>
                         <Button
-                            href={`/courses/${id}/attachments`}
+                            onClick={() => navigate(`/courses/${id}/attachments`)}
                             variant="contained"
                             startIcon={<AttachFileIcon />}>
                             Pliki

@@ -7,7 +7,7 @@ import {Tag} from "../../tag/entities/tag.entity";
 export type ThreadDocument = Thread & Document;
 
 @Schema()
-export class Thread {
+export class Thread extends Document{
     @Prop()
     title: string;
 
@@ -27,7 +27,7 @@ export class Thread {
     posts: Post[];
 
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], default: []})
-    subscribers: User['_id'][];
+    subscribers: User[];
 }
 
 export const ThreadSchema = SchemaFactory.createForClass(Thread);

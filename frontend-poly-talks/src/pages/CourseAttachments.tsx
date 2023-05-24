@@ -14,7 +14,7 @@ import {
     useTheme
 } from "@mui/material";
 import React from "react";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {FileUploadComponent} from "../components/Attachments/FileUploadComponent";
 import {AttachmentDto} from "../dto/attachment.dto";
@@ -94,6 +94,7 @@ export const CourseAttachments = () => {
     const [attachments, setAttachments] = React.useState<AttachmentDto[] | null>(null);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const navigate = useNavigate();
 
     const {id} = useParams();
 
@@ -143,7 +144,7 @@ export const CourseAttachments = () => {
             alignItems: "flex-start"
         }}>
             <Button
-                href={`/courses/${id}`}
+                onClick={() => navigate(`/courses/${id}`)}
                 variant="contained"
                 startIcon={<ArrowBackIcon/>}>
                 Powrót

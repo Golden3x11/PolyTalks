@@ -106,9 +106,5 @@ export const UserPage = () => {
           )
       }
     </Stack>
-
-    <h1 className={classes.header}>
-      Zasubskrybowane wątki
-    </h1>
   </Stack>;
 };

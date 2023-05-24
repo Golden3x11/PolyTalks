@@ -61,6 +61,7 @@ export const Post = ({ post, isComment, threadId }: { post: PostDto, isComment: 
             })
             .then(data => {
                 const updatedComments = [...comments, data];
+                enqueueSnackbar('Dodano komentarz');
                 setComments(updatedComments);
             })
             .catch(error => console.error('Error while adding post:', error));

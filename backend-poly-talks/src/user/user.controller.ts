@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { UserTokenDto } from './dto/user-token.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { Thread } from 'src/thread/entities/thread.entity';
 
 @Controller('api/user')
 export class UserController {
@@ -23,4 +24,9 @@ export class UserController {
     update(@Body() updateUserDto: UpdateUserDto): Promise<User> {
         return this.userService.update(updateUserDto);
     }
+
+    @Get('subscribedThreads')
+    getSubscribedThreads(@Query('token') token: string): Promise<Thread[]> {
+        return this.userService.getSubscribedThreads(token);
+    }   
 }

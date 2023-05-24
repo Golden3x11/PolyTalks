@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import { decodeToken } from '../authentication/token_verify';
+import { Thread } from 'src/thread/entities/thread.entity';
 
 @Injectable()
 export class UserService {
@@ -47,4 +48,38 @@ export class UserService {
             return user;
         })
     }
+
+    async getSubscribedThreads(token: string): Promise<Thread[]> {
+        const userId = (await this.findOne(token))._id
+        return this.userModel.findOne({"_id": userId}).populate("subscribedThreads").exec().then(user => {
+            if(!user)
+                throw new NotFoundException(`User with id ${userId} not found`);
+            return user.subscribedThreads;
+        }) 
+    }
+
+    async addSubscribedThread(userId: string, threadId: string): Promise<User> {
+        return this.userModel.findOneAndUpdate(
+          {"_id": userId},
+          {$push: {"subscribedThreads": threadId}},
+          {new: true}
+        ).exec().then(user => {
+            if(!user)
+                throw new NotFoundException(`User with id ${userId} not found`);
+            return user;
+        })
+    }
+
+    async removeSubscribedThread(userId: string, threadId: string): Promise<User> {
+        return this.userModel.findOneAndUpdate(
+          {"_id": userId},
+          {$pull: {"subscribedThreads": threadId}},
+          {new: true}
+        ).exec().then(user => {
+            if(!user)
+                throw new NotFoundException(`User with id ${userId} not found`);
+            return user;
+        })
+    }
+
 }
