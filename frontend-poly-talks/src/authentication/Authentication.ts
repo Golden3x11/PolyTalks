@@ -1,6 +1,8 @@
 import jwtDecode from 'jwt-decode';
 import React, { createContext } from 'react';
 import { UserDto } from '../dto/user.dto';
+import { Cookies } from 'react-cookie';
+
 // token is stored both in localStorage (to use in services) and in react context (to use state for rerenders)
 export const AuthContext = createContext<CurrentUser>({
   currentUser: undefined,
@@ -24,8 +26,19 @@ export function getDecodedToken(){
   return token ? jwtDecode<DecodedToken>(token) : null;
 }
 
-export function getToken(){
-  return  localStorage.getItem("token");
+export function getToken() {
+  const cookieString = document.cookie;
+  const cookies = cookieString.split(';');
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+
+    if (cookie.startsWith('token' + '=')) {
+      return cookie.substring('token'.length + 1);
+    }
+  }
+
+  return null;
 }
 
 export function decodeToken(token: string): DecodedToken {
