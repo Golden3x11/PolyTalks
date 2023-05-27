@@ -101,7 +101,17 @@ export class CourseService {
             .select('-attachments.value')
             .exec();
 
-        return courseV.attachments;
+        const sortedAttachments = courseV.attachments.sort((a, b) => {
+            if (a.uploadTime < b.uploadTime) {
+                return 1;
+            } else if (a.uploadTime > b.uploadTime) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        return sortedAttachments;
     }
 
     async addAttachment(courseId: string, attachment: CreateAttachmentDto): Promise<Course> {
