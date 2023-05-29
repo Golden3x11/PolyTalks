@@ -1,9 +1,11 @@
 import React from 'react';
 import {Button} from "@mui/material";
 
-export const FileDownload = () => {
+export const FileDownload = ({cid, aid}: { cid: any, aid: string }) => {
     const downloadFile = async () => {
-        const response = await fetch(`http://localhost:8080/api/course/645a6c26be0d6f886fa131d8/attachment/645abed10a36c6241c088e31`);
+        const response = await fetch(
+            `http://localhost:8080/api/course/${cid}/attachment/${aid}`
+        );
         const data = await response.json();
 
         const byteCharacters = atob(data.value);
@@ -12,7 +14,7 @@ export const FileDownload = () => {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
         const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], {type: 'application/octet-stream'});
+        const blob = new Blob([byteArray], { type: 'application/octet-stream' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -22,8 +24,7 @@ export const FileDownload = () => {
     };
 
     return (
-        <Button variant={'contained'}
-                onClick={downloadFile}>
+        <Button variant={'contained'} onClick={downloadFile}>
             Download File
         </Button>
     );

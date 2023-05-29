@@ -8,11 +8,13 @@ import mongoose, {Model} from "mongoose";
 import {CreateRatingDto} from "./dto/create-rating.dto";
 import {Course, CourseDocument} from "../course/entities/course.entity";
 import {UpdateRatingDto} from "./dto/update-rating.dto";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class LecturerService {
     constructor(@InjectModel(Lecturer.name) private lecturerModel: Model<LecturerDocument>,
-                @InjectModel(Course.name) private courseModel: Model<CourseDocument>) {
+                @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
+                private readonly userService: UserService) {
     }
 
     async create(createLecturerDto: CreateLecturerDto): Promise<Lecturer> {
@@ -37,7 +39,13 @@ export class LecturerService {
     }
 
     async findById(id: string): Promise<Lecturer> {
-        const lecturer = await this.lecturerModel.findById(id).populate('courses').exec();
+        const lecturer = await this.lecturerModel.findById(id)
+            .populate({
+                path: 'courses',
+                select: '-attachments'
+            })
+            .populate('ratings.author')
+            .exec();
         if (!lecturer) {
             throw new NotFoundException(`Lecturer with ID ${id} not found`);
         }
@@ -84,8 +92,15 @@ export class LecturerService {
         if (!lecturer) {
             throw new NotFoundException(`Lecturer with ID ${lecturerId} not found`);
         }
+        const {userToken, ...createRating} = createRatingDto;
 
-        lecturer.ratings.push({_id: new mongoose.Types.ObjectId(), ...createRatingDto});
+
+        lecturer.ratings.push({
+            _id: new mongoose.Types.ObjectId(),
+            ...createRating,
+            author: await this.userService.findOne(userToken),
+            creationDate: new Date()
+        });
         return lecturer.save();
     }
 
@@ -119,8 +134,8 @@ export class LecturerService {
             throw new NotFoundException(`Rating with id ${ratingId} not found`);
         }
 
-        if (updateRatingDto.author) {
-            rating.author = updateRatingDto.author;
+        if (updateRatingDto.userToken) {
+            rating.author = await this.userService.findOne(updateRatingDto.userToken);
         }
 
         if (updateRatingDto.title) {

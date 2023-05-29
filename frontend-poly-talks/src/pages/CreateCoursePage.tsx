@@ -12,6 +12,9 @@ import React from "react";
 import {makeStyles} from "tss-react/mui";
 import {AddMajorDialog} from "../components/AddMajorDialog";
 import {CourseDto} from "../dto/course.dto";
+import {enqueueSnackbar} from "notistack";
+import {useNavigate} from "react-router";
+import {getToken} from "../authentication/Authentication";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -50,6 +53,7 @@ export const CreateCoursePage = () => {
     const [major, setMajor] = React.useState("");
     const [majorList, setMajorList] = React.useState<string[]>([]);
     const [isAddMajorDialogOpen, setIsAddMajorDialogOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
@@ -99,6 +103,10 @@ export const CreateCoursePage = () => {
 
 
     const addCourse = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         fetch('http://localhost:8080/api/course', {
             method: 'POST',
             headers: {
@@ -113,9 +121,14 @@ export const CreateCoursePage = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Course added successfully:', data);
+                if (data._id) {
+                    navigate(`/courses/${data._id}`);
+                }
             })
-            .catch(error => console.error('Error while adding course:', error));
+            .catch(error => {
+                enqueueSnackbar('Nie dodano kursu');
+                console.error(error);
+            });
     };
 
     return (

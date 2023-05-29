@@ -1,6 +1,9 @@
 import {Button, TextField} from '@mui/material';
 import React from "react";
 import {makeStyles} from "tss-react/mui";
+import {enqueueSnackbar} from "notistack";
+import {useNavigate} from "react-router";
+import {getToken} from "../../authentication/Authentication";
 
 const useStyles = makeStyles()((theme) => ({
     red: {
@@ -25,6 +28,7 @@ export const CreateLecturerPage = () => {
     const [name, setName] = React.useState("");
     const [surname, setSurname] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const navigate = useNavigate();
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
@@ -39,6 +43,10 @@ export const CreateLecturerPage = () => {
     }
 
     const addLecturer = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         fetch('http://localhost:8080/api/lecturer', {
             method: 'POST',
             headers: {
@@ -52,9 +60,11 @@ export const CreateLecturerPage = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Lecturer added successfully:', data);
+                if(data._id){
+                    navigate(`/lecturer/${data._id}`);
+                }
             })
-            .catch(error => console.error('Error while adding lecturer:', error));
+            .catch(error => enqueueSnackbar('Nie dodano prowadzacego'));
     };
 
     return (

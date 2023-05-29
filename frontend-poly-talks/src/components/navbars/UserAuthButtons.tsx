@@ -4,9 +4,10 @@ import { useContext, useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { NavLink } from 'react-router-dom';
 import './../../styles/navbars.css';
-import { AuthContext } from '../../authentication/Authentication';
+import { AuthContext, getToken } from '../../authentication/Authentication';
 import { createUser } from '../../services/UserApiService';
 import { useNavigate } from 'react-router';
+import { useCookies } from 'react-cookie';
 
 const useStyles = makeStyles()({
   container: {
@@ -26,24 +27,31 @@ export const UserAuthButtons = () => {
   const { classes, cx } = useStyles(undefined, undefined);
   const {currentUser, setCurrentUser} = useContext(AuthContext)
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   useEffect(() => {
     if(token?.credential){
       createUser({
         token: token.credential
       }).then(setCurrentUser)
-      localStorage.setItem("token", token.credential);
+      setCookie('token', token.credential);
+    }else if(getToken()){
+      createUser({
+        token: getToken()!
+      }).then(setCurrentUser)
     }else{
-      localStorage.removeItem("token");
+      removeCookie('token');
       setCurrentUser(undefined);
     }
-  }, [token, setCurrentUser])
+  }, [token, setCurrentUser, setCookie, removeCookie]);
+  
 
   const logout = () => {
     googleLogout();
-    setToken(undefined);
+    removeCookie('token');
+    setCurrentUser(undefined);
     navigate('/');
-  }
+  };  
 
   return (
     <div className={cx(classes.container)}>

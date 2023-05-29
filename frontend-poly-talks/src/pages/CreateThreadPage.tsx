@@ -15,6 +15,8 @@ import React, {useContext, useEffect} from "react";
 import {TagDto} from "../dto/tag.dto";
 import {AddTagDialog} from "../components/AddTagDialog";
 import {getToken} from "../authentication/Authentication";
+import {enqueueSnackbar} from "notistack";
+import {useNavigate} from "react-router";
 
 
 const ITEM_HEIGHT = 48;
@@ -53,6 +55,7 @@ export const CreateThreadPage = () => {
     const [description, setDescription] = React.useState("");
     const [tagsList, setTagsList] = React.useState<string[]>([]);
     const [isAddTagDialogOpen, setIsAddTagDialogOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         fetch('http://localhost:8080/api/tag')
@@ -93,6 +96,10 @@ export const CreateThreadPage = () => {
     }
 
     const addThread = () => {
+        if (!getToken()) {
+            enqueueSnackbar('Zaloguj się kontem Google');
+            return
+        }
         fetch('http://localhost:8080/api/thread', {
             method: 'POST',
             headers: {
@@ -107,10 +114,14 @@ export const CreateThreadPage = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Thread added successfully:', data);
+                if(data._id){
+                    navigate(`/threads/${data._id}`);
+                }
             })
-            .catch(error => console.error('Error while adding thread:', error));
-    };
+            .catch((err) => {
+                console.log(err);
+                enqueueSnackbar('Nie dodano wątku');
+            });    };
 
     return (
     <div style={{margin: '0 2em', display: 'flex', flexDirection: 'column', gap: '0.3em'}}>

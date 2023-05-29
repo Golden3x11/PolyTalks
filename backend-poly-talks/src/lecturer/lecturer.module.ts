@@ -5,6 +5,7 @@ import {MongooseModule} from '@nestjs/mongoose';
 
 import {CourseModule} from '../course/course.module';
 import {Lecturer, LecturerSchema} from "./entities/lecturer.entity";
+import {UserModule} from "../user/user.module";
 
 @Module({
     imports: [
@@ -14,7 +15,8 @@ import {Lecturer, LecturerSchema} from "./entities/lecturer.entity";
                 schema: LecturerSchema,
             },
         ]),
-        forwardRef(() => CourseModule), // <-- use forwardRef() here
+        forwardRef(() => CourseModule),
+        UserModule
     ],
     controllers: [LecturerController],
     providers: [LecturerService],

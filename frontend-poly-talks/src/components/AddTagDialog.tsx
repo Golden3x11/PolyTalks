@@ -7,6 +7,7 @@ import {
     TextField,
     Button,
 } from '@mui/material';
+import {enqueueSnackbar} from "notistack";
 
 export function AddTagDialog(props: any) {
     const [tagName, setTagName] = useState('');
@@ -34,7 +35,7 @@ export function AddTagDialog(props: any) {
                 setTagName('');
             })
             .catch(error => {
-                console.error('Error while adding tag:', error);
+                enqueueSnackbar('Nie dodano tagu');
                 props.onClose();
             });
     };

@@ -1,10 +1,11 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
-import {ThreadService} from './thread.service';
-import {CreateThreadDto} from './dto/create-thread.dto';
-import {UpdateThreadDto} from './dto/update-thread.dto';
-import {CreatePostDto} from "./dto/create-post.dto";
-import {Thread} from "./entities/thread.entity";
-import {UpdatePostDto} from "./dto/update-post.dto";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ThreadService } from './thread.service';
+import { CreateThreadDto } from './dto/create-thread.dto';
+import { UpdateThreadDto } from './dto/update-thread.dto';
+import { CreatePostDto } from "./dto/create-post.dto";
+import { Thread } from "./entities/thread.entity";
+import { UpdatePostDto } from "./dto/update-post.dto";
+import { UserTokenDto } from 'src/user/dto/user-token.dto';
 
 @Controller('/api/thread')
 export class ThreadController {
@@ -24,6 +25,11 @@ export class ThreadController {
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.threadService.findById(id);
+    }
+
+    @Get(':id/isUserSubscribe')
+    isUserSubscribeThreadf(@Param('id') id: string, @Query('token') token: string) {
+        return this.threadService.isUserSubscribeThread(id, token);
     }
 
     @Patch(':id')
@@ -52,7 +58,17 @@ export class ThreadController {
     }
 
     @Post(':threadId/posts/:postId')
-    async addCommentToPost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() createPostDto: CreatePostDto,): Promise<Thread> {
+    async addCommentToPost(@Param('threadId') threadId: string, @Param('postId') postId: string, @Body() createPostDto: CreatePostDto,): Promise<Comment> {
         return this.threadService.addCommentToPost(threadId, postId, createPostDto);
+    }
+
+    @Post(':threadId/subscribe')
+    async subscribeToThread(@Param('threadId') threadId: string, @Body() userToken: UserTokenDto): Promise<Thread> {
+        return this.threadService.subscribeToThread(threadId, userToken);
+    }
+
+    @Delete(':threadId/unsubscribe')
+    async unsubscribeFromThread(@Param('threadId') threadId: string, @Body() userToken: UserTokenDto): Promise<Thread> {
+        return this.threadService.unsubscribeFromThread(threadId, userToken);
     }
 }
