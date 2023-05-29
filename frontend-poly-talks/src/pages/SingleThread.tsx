@@ -68,7 +68,7 @@ export const SingleThread = () => {
     };
 
     return (
-        <div style={{padding: '1em 2em', display: 'flex', flexDirection: 'column', gap: '0.15em'}}>
+        <div style={{padding: '0 2em', display: 'flex', flexDirection: 'column', gap: '0.15em'}}>
             <Card style={{ boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.32), 0px 1px 1px 0px rgba(0,0,0,0.32), 0px 1px 3px 0px rgba(0,0,0,0.28)"}} >
                 <CardContent>
                     <div>

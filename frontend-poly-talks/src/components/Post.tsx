@@ -23,11 +23,7 @@ export const Post = ({ post }: { post: PostDto }) => {
         <Card className={`${classes.maxWidth}`} style={{ boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.32), 0px 1px 1px 0px rgba(0,0,0,0.32), 0px 1px 3px 0px rgba(0,0,0,0.28)", display: "flex", justifyContent: "space-between"}} >
             <div>
             <CardHeader
-                avatar={
-                    <Avatar
-                        src={`/avatar-${post?.author.avatar}.jpg`}
-                    />
-                }
+                avatar={<Avatar src={`/avatar-${post.author.avatar}.jpg`} />}
                 title={`${post?.author.username}`}
                 subheader={`${dateToLocale(post?.creationDate)}`}
             />

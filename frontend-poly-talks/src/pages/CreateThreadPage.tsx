@@ -113,7 +113,7 @@ export const CreateThreadPage = () => {
     };
 
     return (
-    <div style={{margin: '1em 2em', display: 'flex', flexDirection: 'column', gap: '0.3em'}}>
+    <div style={{margin: '0 2em', display: 'flex', flexDirection: 'column', gap: '0.3em'}}>
         <div className={`${classes.header}`}>
             <h1 className={`${classes.red}`} style={{fontWeight: 'bold'}}>Utwórz nowy wątek</h1>
             <Button variant="contained"
