@@ -2,6 +2,19 @@
 version: '3.1'
 
 services:
+  frontend:
+    build: ./frontend-poly-talks
+    ports:
+      - "3000:3000"
+    image: polytalks_frontend
+
+  backend:
+    build: ./backend-poly-talks
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    image: polytalks_backend
 
   mongo:
     image: mongo
@@ -10,7 +23,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
     ports:
-      - 27017:27017
+      - "27017:27017"
+    expose:
+      - 27017
 
   mongo-express:
     image: mongo-express
