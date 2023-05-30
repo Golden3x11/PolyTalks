@@ -30,6 +30,7 @@ export const SearchBar = () => {
         onChange={e => setSearchText(e.target.value)}
         className={classes.search}
         size={"small"}
+        placeholder={"Wyszukiwanie..."}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
