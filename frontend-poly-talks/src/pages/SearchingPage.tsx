@@ -29,7 +29,11 @@ export const SearchingPage = () => {
     searchByTags: "true"
   })
   const [results, setResults] = useState<SearchResultDto | undefined>(undefined)
-  const isResultEmpty = !(results?.lecturers.length && results?.courses.length && results?.threads.length)
+  const isResultEmpty = (res?: SearchResultDto) => {
+    if(!res) return true;
+
+    return !res?.lecturers.length && !res?.courses.length && !res?.threads.length;
+  }
 
   useEffect(() => {
     let url = `http://localhost:8080/api/search?query=${query}&lecturers=${searchParams.lecturers}&courses=${searchParams.courses}&threads=${searchParams.threads}&searchByTags=${searchParams.searchByTags}`;
@@ -46,7 +50,7 @@ export const SearchingPage = () => {
 
       <SearchingButtons params={searchParams} onChange={setSearchParams}/>
 
-      {isResultEmpty && <h4>Brak wyników...</h4>}
+      {isResultEmpty(results) && <h4>Brak wyników...</h4>}
 
       <List component="nav">
         {results?.courses.map(course => (<>
