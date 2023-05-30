@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router';
 const useStyles = makeStyles()({
   search: {
     width: "30%",
+    position: "fixed",
+    left: "50%",
+    transform: "translateX(-50%)",
   }
 });
 
@@ -26,6 +29,7 @@ export const SearchBar = () => {
         value={searchText}
         onChange={e => setSearchText(e.target.value)}
         className={classes.search}
+        size={"small"}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
