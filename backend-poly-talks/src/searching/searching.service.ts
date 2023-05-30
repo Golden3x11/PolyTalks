@@ -39,15 +39,17 @@ export class SearchingService {
     }
 
     let threads = [];
-    if(searchParamsDto.threads  === 'true' && searchParamsDto.searchByTags  === 'true'){
+    if(searchParamsDto.threads  === 'true' && searchParamsDto.searchByTags  === 'false'){
       threads = await this.threadModel.find({
         title: this.regex(searchParamsDto.query),
       }).exec()
     }else if(searchParamsDto.threads  === 'true'){
+      const tagsRegex = [searchParamsDto.query].map(function (e) { return new RegExp(e, "i"); });
+
       threads = await this.threadModel.find({
         $or: [
           { title: this.regex(searchParamsDto.query) },
-          { tags: {$in: [this.regex(searchParamsDto.query)]} }]
+          { tags: {$in: tagsRegex} }]
       }).exec()
     }
 

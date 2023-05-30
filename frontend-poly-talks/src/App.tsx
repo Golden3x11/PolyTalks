@@ -21,6 +21,7 @@ import { SnackbarProvider } from 'notistack';
 import { UserDto } from './dto/user.dto';
 import {SingleCourse} from "./pages/SingleCourse";
 import {CourseAttachments} from "./pages/CourseAttachments";
+import { SearchingPage } from './pages/SearchingPage';
 
 const theme = createTheme({
   palette: {
@@ -63,6 +64,7 @@ function App() {
                 <Route path={'/lecturers/create'} Component={CreateLecturerPage}></Route>
                 <Route path="/lecturer/:id" Component={SingleLecturerPage}></Route>
                 <Route path={'/user'} Component={UserPage}></Route>
+                <Route path={'/search/:query'} Component={SearchingPage}></Route>
               </Routes>
             </div>
           </BrowserRouter>
