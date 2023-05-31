@@ -1,4 +1,4 @@
-import {Divider, IconButton, Input, List, Paper} from '@mui/material';
+import {Card, CardContent, Divider, IconButton, Input, List, Paper} from '@mui/material';
 import React, {useState} from "react";
 import {makeStyles} from "tss-react/mui";
 import {ThreadDto} from "../dto/thread.dto";
@@ -45,10 +45,13 @@ export const ThreadsPage = () => {
             </Paper>
             <List component="nav">
                 {filteredThreads.map(thread => (<>
-                        <Link style={{textDecoration: "none", color: "black"}} to={`/threads/${thread._id}`}>
+                    <Card style={{marginBottom: "0.5em"}}><CardContent>
+
+                    <Link style={{textDecoration: "none", color: "black"}} to={`/threads/${thread._id}`}>
                             <h3>{thread.title}</h3>
                             <p>{thread.description}</p>
-                        </Link><Divider/>
+                        </Link>
+                    </CardContent></Card>
                     </>
                 ))}
             </List>

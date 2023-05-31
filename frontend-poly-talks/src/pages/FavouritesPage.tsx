@@ -1,22 +1,22 @@
-import { Divider, IconButton, Input, List, Paper} from '@mui/material';
-import { useEffect, useState } from 'react';
-import { makeStyles } from 'tss-react/mui';
-import { ThreadDto } from '../dto/thread.dto';
+import {Card, CardContent, IconButton, Input, List, Paper} from '@mui/material';
+import {useEffect, useState} from 'react';
+import {makeStyles} from 'tss-react/mui';
+import {ThreadDto} from '../dto/thread.dto';
 import SearchIcon from '@mui/icons-material/Search';
 import {Link, useNavigate} from "react-router-dom";
-import { enqueueSnackbar } from 'notistack';
-import { getToken } from '../authentication/Authentication';
+import {enqueueSnackbar} from 'notistack';
+import {getToken} from '../authentication/Authentication';
 
 
 const useStyles = makeStyles()((theme) => ({
-  red: {
-      color: theme.palette.primary.main
-  }
+    red: {
+        color: theme.palette.primary.main
+    }
 }));
 
 
 export const FavouritesPage = () => {
-  const {classes, cx} = useStyles(undefined, undefined);
+    const {classes, cx} = useStyles(undefined, undefined);
     const [threads, setThreads] = useState<ThreadDto[]>([])
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
@@ -29,16 +29,15 @@ export const FavouritesPage = () => {
     };
 
     useEffect(() => {
-      if (!getToken()){
-        enqueueSnackbar("Zaloguj się kontem Google");
-        navigate("/");
-      }
-      else{
-        fetch(`http://localhost:8080/api/user/subscribedThreads?token=${getToken()}`)
-            .then(response => response.json())
-            .then(data => setThreads(data))
-            .catch(error => console.error(error));
-      }
+        if (!getToken()) {
+            enqueueSnackbar("Zaloguj się kontem Google");
+            navigate("/");
+        } else {
+            fetch(`http://localhost:8080/api/user/subscribedThreads?token=${getToken()}`)
+                .then(response => response.json())
+                .then(data => setThreads(data))
+                .catch(error => console.error(error));
+        }
     }, []);
 
 
@@ -49,17 +48,21 @@ export const FavouritesPage = () => {
                 component="form"
                 sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 400, justifyContent: "space-between"}}
             >
-                <Input sx={{flexGrow: 1}} type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Szukaj po tytule"/>
+                <Input sx={{flexGrow: 1}} type="text" value={searchTerm} onChange={handleSearchChange}
+                       placeholder="Szukaj po tytule"/>
                 <IconButton type="button" sx={{p: '10px'}} aria-label="search">
                     <SearchIcon/>
                 </IconButton>
             </Paper>
             <List component="nav">
                 {filteredThreads.map(thread => (<>
-                        <Link style={{textDecoration: "none", color: "black"}} to={`/threads/${thread._id}`}>
-                            <h3>{thread.title}</h3>
-                            <p>{thread.description}</p>
-                        </Link><Divider/>
+                        <Card style={{marginBottom: "0.5em"}}><CardContent>
+                            <Link style={{textDecoration: "none", color: "black"}} to={`/threads/${thread._id}`}>
+                                <h3>{thread.title}</h3>
+                                <p>{thread.description}</p>
+                            </Link>
+                        </CardContent></Card>
+
                     </>
                 ))}
             </List>

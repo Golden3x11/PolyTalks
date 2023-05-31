@@ -11,7 +11,9 @@ export const Header = () => {
       elevation={0}
     >
       <img src="/logo.svg" alt={"logo"} className={"logo"}/>
+      <span />
       <SearchBar/>
+      <span />
       <UserAuthButtons/>
     </AppBar>
   );

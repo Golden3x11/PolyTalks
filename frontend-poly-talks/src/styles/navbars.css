@@ -5,9 +5,9 @@
 
 .appBar {
     position: sticky !important;
-    display: flex;
-    flex-direction: row !important;
-    justify-content: space-between;
+    display: grid !important;
+    grid-template-columns: 10% 20% 40% 25% 5%;
+    grid-template-rows: 100%;
     align-items: center;
     height: 7vh;
     border-bottom: 3px solid grey;

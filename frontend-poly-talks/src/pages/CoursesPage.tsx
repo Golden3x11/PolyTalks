@@ -1,4 +1,4 @@
-import {Divider, IconButton, Input, List, Paper} from '@mui/material';
+import {Card, CardContent, IconButton, Input, List, Paper} from '@mui/material';
 import {makeStyles} from "tss-react/mui";
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
@@ -37,17 +37,19 @@ export const CoursesPage = () => {
                 component="form"
                 sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 400, justifyContent: "space-between"}}
             >
-                <Input sx={{flexGrow: 1}} type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Szukaj po tytule"/>
+                <Input sx={{flexGrow: 1}} type="text" value={searchTerm} onChange={handleSearchChange}
+                       placeholder="Szukaj po tytule"/>
                 <IconButton type="button" sx={{p: '10px'}} aria-label="search">
                     <SearchIcon/>
                 </IconButton>
             </Paper>
             <List component="nav">
                 {filteredCourses.map(course => (<>
-                        <Link style={{textDecoration: "none", color: "black"}} to={`/courses/${course._id}`}>
-                            <h3>{course.name} {course.code}</h3>
-                        </Link>
-                        <Divider/>
+                        <Card style={{marginBottom: "0.5em"}}><CardContent>
+                            <Link style={{textDecoration: "none", color: "black"}} to={`/courses/${course._id}`}>
+                                <h3>{course.name} {course.code}</h3>
+                            </Link>
+                        </CardContent></Card>
                     </>
                 ))}
             </List>

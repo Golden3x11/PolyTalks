@@ -91,7 +91,12 @@ export const Post = ({ post, isComment, threadId }: { post: PostDto, isComment: 
                 {!isComment &&
                     <CardActions disableSpacing style={{display: "flex", flexDirection: "row-reverse", alignItems: "flex-end"}}>
                         <IconButton onClick={() => {setShowComments(!showComments); setRows(1)}}>
-                            <Badge badgeContent={comments.length} color="primary">
+                            <Badge badgeContent={comments.length} sx={{
+                                "& .MuiBadge-badge": {
+                                    color: "white",
+                                    backgroundColor: "#393939"
+                                }
+                            }}>
                                 <Comment />
                             </Badge>
                         </IconButton>
