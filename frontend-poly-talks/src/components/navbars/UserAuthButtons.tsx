@@ -12,7 +12,7 @@ import { useCookies } from 'react-cookie';
 const useStyles = makeStyles()({
   container: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     padding: "0",
     marginRight: "12px" // HACK: minimum value to not make appbar wider than screen (probably caused by styles inside GoogleLogin component)
@@ -65,7 +65,7 @@ export const UserAuthButtons = () => {
         }}
       />}
 
-      {currentUser && <>
+      {currentUser && <div style={{display: "flex", justifyContent: "flex-end"}}>
         <Button
           className={cx(classes.margin)}
           size={"small"}
@@ -79,7 +79,7 @@ export const UserAuthButtons = () => {
             src={`/avatar-${currentUser.avatar}.jpg`}
           />
         </NavLink>
-      </>
+      </div>
       }
     </div>
   );
