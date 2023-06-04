@@ -1,6 +1,7 @@
 import { Avatar, Card, CardContent, Stack, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { Link } from 'react-router-dom';
+import useWindowDimensions from '../../utils/window-dimensions';
 
 interface SingleThreadTrendProps {
   id: string;
@@ -24,9 +25,20 @@ const useStyles = makeStyles()(() => ({
 export const SingleThreadTrend = (props: SingleThreadTrendProps) => {
   const {id, title, content, author, authorAvatar} = props;
   const {classes} = useStyles();
+  const { height: windowHeight } = useWindowDimensions();
 
   const shortenContent = (text: string) => {
-    return text.length > 90 ? `${text.substring(0, 91)}...` : text;
+    let limit = 90;
+
+    return text.length > limit ? `${text.substring(0, limit+1)}...` : text;
+  }
+
+  const displayDescription = () => {
+    if(windowHeight > 840){
+      return <div className={classes.description}>
+        {shortenContent(content)}
+      </div>
+    }
   }
 
   return <Card className={classes.card}>
@@ -36,9 +48,7 @@ export const SingleThreadTrend = (props: SingleThreadTrendProps) => {
           <Link to={`/threads/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
             <Typography variant={"h4"} component={"p"}>{title}</Typography>
           </Link>
-          <div className={classes.description}>
-            {shortenContent(content)}
-          </div>
+          {displayDescription()}
         </Stack>
         <Stack direction={"row"} spacing={1} alignItems={"center"} sx={{height: "20%"}}>
           <Avatar src={`/avatar-${authorAvatar}.jpg`}/>
