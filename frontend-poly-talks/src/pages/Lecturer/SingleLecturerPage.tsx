@@ -2,11 +2,12 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 import {makeStyles} from "tss-react/mui";
 import {LecturerDto} from "../../dto/lecturer.dto";
-import {Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Divider, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Typography} from "@mui/material";
 import {RatingBoxCreate} from "../../components/Rating/RatingBoxCreate";
 import {RatingDto} from "../../dto/rating.dto";
 import {SingleRating} from "../../components/Rating/SingleRating";
 import {Add} from "@mui/icons-material";
+import MultiColumnChart from "../../components/Chart/MultiColumnChart";
 
 
 const useStyles = makeStyles()((theme) => ({
@@ -41,7 +42,7 @@ export const SingleLecturerPage = () => {
             })
             .catch((error) => console.error(error));
     }
-        return (
+    return (
         <div style={{padding: '1em 2em', display: 'flex', flexDirection: 'column', gap: '2em'}}>
             <Card>
                 <CardContent>
@@ -57,6 +58,13 @@ export const SingleLecturerPage = () => {
                     <p style={{fontSize: 20, marginTop: '0.2em'}}>{lecturer?.email}</p>
                 </CardContent>
             </Card>
+
+            <Card>
+                <CardContent>
+                    <MultiColumnChart data={ratings}/>
+                </CardContent>
+            </Card>
+
             <Accordion expanded={isAccordionOpen}>
                 <AccordionSummary
                     expandIcon={<Add/>}
