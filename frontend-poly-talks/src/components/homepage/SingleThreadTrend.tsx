@@ -28,6 +28,9 @@ export const SingleThreadTrend = (props: SingleThreadTrendProps) => {
   const { height: windowHeight } = useWindowDimensions();
 
   const shortenContent = (text: string) => {
+    if(title.length > 15)
+      return  '';
+
     let limit = 90;
 
     return text.length > limit ? `${text.substring(0, limit+1)}...` : text;

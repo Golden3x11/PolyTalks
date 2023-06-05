@@ -47,10 +47,7 @@ export class ThreadService {
         }
         const user = await this.userService.findOne(token)
         const userIndex = thread.subscribers.findIndex(u => u._id.toString() === user._id.toString())
-        if (userIndex === -1) {
-            return false
-        }
-        return true
+        return userIndex !== -1;
     }
 
     async findById(id: string): Promise<Thread> {
@@ -216,5 +213,24 @@ export class ThreadService {
         thread.subscribers.splice(userIndex, 1)
         await thread.save()
         return thread
+    }
+
+    async getPopularTodayThreads(): Promise<Thread[]> {
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDay(), 0, 0, 0);
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDay(), 23, 59, 59);
+
+        // find today threads
+        const todayThreads = await this.threadModel.find({
+            creationDate: {
+                $gte: startOfDay,
+                $lte: endOfDay,
+            },
+        }).limit(4).populate('author').exec();
+
+        if (todayThreads.length == 4)
+            return todayThreads;
+
+        return this.threadModel.find().sort({creationDate: -1}).limit(4).populate('author').exec();
     }
 }

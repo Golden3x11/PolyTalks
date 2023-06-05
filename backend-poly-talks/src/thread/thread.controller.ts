@@ -22,6 +22,11 @@ export class ThreadController {
         return this.threadService.findAll();
     }
 
+    @Get('popular_today')
+    async getPopularTodayThreads(): Promise<Thread[]> {
+        return this.threadService.getPopularTodayThreads()
+    }
+
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.threadService.findById(id);

@@ -21,36 +21,40 @@ export const TodayTrends = () => {
   const {classes} = useStyles();
 
   useEffect(() => {
-    setTrends([{
-      _id: "6464d7b7d020504aca68f098",
-      title: "Piwo piwerko",
-      description: "Jakie piwko jest najlepsze do leja?",
-      tags: ["piwo"],
-      creationDate: new Date(),
-      posts: [],
-      subscribers: [],
-      author: {
-        _id: "aaaaaa",
-        username: "Orzelek123",
-        email: "orzelek@email",
-        avatar: "2"
-      }
-    }, {
-      _id: "6464d7b7d020504aca68f098",
-      title: "Rajdzik",
-      description: "Siema, szukamy rajdu. Macie jakieś miejsca do polecenia? Najlepiej z stabilnymi lozkami. No i zeby bylo duzo alko hehe",
-      tags: ["piwo"],
-      creationDate: new Date(),
-      posts: [],
-      subscribers: [],
-      author: {
-        _id: "aaaaaa",
-        username: "Oczy kobry",
-        email: "orzelek@email",
-        avatar: "1"
-      }
-    }])
-    setTrends(prevState => [prevState![0], prevState![1], prevState![0], prevState![1]])
+    fetch('http://localhost:8080/api/thread/popular_today')
+      .then(response => response.json())
+      .then(data => setTrends(data))
+      .catch(error => console.error(error));
+    // setTrends([{
+    //   _id: "6464d7b7d020504aca68f098",
+    //   title: "Piwo piwerko",
+    //   description: "Jakie piwko jest najlepsze do leja?",
+    //   tags: ["piwo"],
+    //   creationDate: new Date(),
+    //   posts: [],
+    //   subscribers: [],
+    //   author: {
+    //     _id: "aaaaaa",
+    //     username: "Orzelek123",
+    //     email: "orzelek@email",
+    //     avatar: "2"
+    //   }
+    // }, {
+    //   _id: "6464d7b7d020504aca68f098",
+    //   title: "Rajdzik",
+    //   description: "Siema, szukamy rajdu. Macie jakieś miejsca do polecenia? Najlepiej z stabilnymi lozkami. No i zeby bylo duzo alko hehe",
+    //   tags: ["piwo"],
+    //   creationDate: new Date(),
+    //   posts: [],
+    //   subscribers: [],
+    //   author: {
+    //     _id: "aaaaaa",
+    //     username: "Oczy kobry",
+    //     email: "orzelek@email",
+    //     avatar: "1"
+    //   }
+    // }])
+    // setTrends(prevState => [prevState![0], prevState![1], prevState![0], prevState![1]])
   }, [])
 
   return <div className={classes.container}>
