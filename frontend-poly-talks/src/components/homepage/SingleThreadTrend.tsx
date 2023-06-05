@@ -13,7 +13,7 @@ interface SingleThreadTrendProps {
 
 const useStyles = makeStyles()(() => ({
   card: {
-    width: '300px',
+    width: '330px',
     height: '100%',
   },
   description: {

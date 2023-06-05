@@ -50,6 +50,7 @@ export const TodayTrends = () => {
         avatar: "1"
       }
     }])
+    setTrends(prevState => [prevState![0], prevState![1], prevState![0], prevState![1]])
   }, [])
 
   return <div className={classes.container}>
