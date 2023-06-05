@@ -9,12 +9,13 @@ import {CreateRatingDto} from "./dto/create-rating.dto";
 import {Course, CourseDocument} from "../course/entities/course.entity";
 import {UpdateRatingDto} from "./dto/update-rating.dto";
 import {UserService} from "../user/user.service";
+import {CourseService} from "../course/course.service";
 
 @Injectable()
 export class LecturerService {
     constructor(@InjectModel(Lecturer.name) private lecturerModel: Model<LecturerDocument>,
                 @InjectModel(Course.name) private courseModel: Model<CourseDocument>,
-                private readonly userService: UserService) {
+                private readonly userService: UserService, private readonly courseService: CourseService) {
     }
 
     async create(createLecturerDto: CreateLecturerDto): Promise<Lecturer> {
@@ -92,12 +93,13 @@ export class LecturerService {
         if (!lecturer) {
             throw new NotFoundException(`Lecturer with ID ${lecturerId} not found`);
         }
-        const {userToken, ...createRating} = createRatingDto;
+        const {userToken, course, ...createRating} = createRatingDto;
 
 
         lecturer.ratings.push({
             _id: new mongoose.Types.ObjectId(),
             ...createRating,
+            course: await this.courseService.findById(course),
             author: await this.userService.findOne(userToken),
             creationDate: new Date()
         });

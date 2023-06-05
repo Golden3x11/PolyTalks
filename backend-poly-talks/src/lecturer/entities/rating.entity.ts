@@ -1,17 +1,18 @@
 import {User} from "../../user/entities/user.entity";
 import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import mongoose, {Document} from "mongoose";
+import {Course} from "../../course/entities/course.entity";
 
 @Schema()
 export class Rating {
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+    @Prop({type: mongoose.Schema.Types.ObjectId, auto: true})
     _id: mongoose.Types.ObjectId;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null })
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null})
     author: User;
 
-    @Prop({ default: new Date() })
+    @Prop({default: new Date()})
     creationDate: Date;
 
     @Prop()
@@ -19,6 +20,9 @@ export class Rating {
 
     @Prop()
     description: string;
+
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Course', default: null})
+    course: Course;
 
     @Prop()
     rating_difficulty: number;

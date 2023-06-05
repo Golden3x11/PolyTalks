@@ -14,6 +14,10 @@ export class CreateRatingDto {
     description: string;
 
     @IsNotEmpty()
+    @IsString()
+    course: string;
+
+    @IsNotEmpty()
     @IsNumber()
     rating_difficulty: number;
 

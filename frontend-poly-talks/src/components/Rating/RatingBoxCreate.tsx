@@ -1,9 +1,21 @@
 import React, {useState} from 'react';
 import {StarRating} from './StarRating';
-import {Button, TextField} from "@mui/material";
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    SelectChangeEvent,
+    TextField
+} from "@mui/material";
 import {makeStyles} from "tss-react/mui";
 import {getToken} from "../../authentication/Authentication";
 import {enqueueSnackbar} from "notistack";
+import {LecturerDto} from "../../dto/lecturer.dto";
+import {CourseDto} from "../../dto/course.dto";
+import {AddCourseDialog} from "../AddCourseDialog";
 
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,9 +31,24 @@ const useStyles = makeStyles()((theme) => ({
     }
 }));
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
 interface RatingBoxCreateProps {
     id: string | undefined;
     handleRatingCreated: any;
+}
+
+interface CourseDictionary {
+    [key: string]: string;
 }
 
 export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
@@ -29,6 +56,12 @@ export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
     const {classes, cx} = useStyles(undefined, undefined);
     const [title, setTitle] = React.useState("");
     const [description, setDescription] = React.useState("");
+    const [course, setCourse] = React.useState("");
+    const [courseList, setCourseList] = React.useState<any[]>([]);
+
+    const [isAddCourseDialogOpen, setIsAddCourseDialogOpen] = React.useState(false);
+    const [allCourseList, setAllCourseList] = React.useState<any[]>([]);
+    const [courseDictionary, setCourseDictionary] = React.useState<CourseDictionary>({});
 
     const [ratingValues, setRatingValues] = useState({
         difficulty: 0,
@@ -52,6 +85,70 @@ export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
         setDescription(event.target.value);
     }
 
+    const handleCourseChange = (event: SelectChangeEvent) => {
+        setCourse(event.target.value);
+    };
+
+    const handleOpenAddCourseDialog = () => {
+        setIsAddCourseDialogOpen(true);
+    };
+
+    const handleCloseAddCourseDialog = () => {
+        setIsAddCourseDialogOpen(false);
+    };
+
+    const handleAddCourse = (courseId: string) => {
+        setCourse(courseId);
+        let courseAdded = allCourseList.find((course: CourseDto) => course._id === courseId);
+        setCourseList([...courseList, courseAdded])
+        setIsAddCourseDialogOpen(false);
+    };
+
+
+    const getAllLecturerCourse = () => {
+        fetch("http://localhost:8080/api/lecturer")
+            .then(response => response.json())
+            .then(data => {
+                const courses = data.map((lecturer: LecturerDto) => lecturer.courses);
+                setCourseList(courses[0]);
+            })
+            .catch(error => console.error("Error while retrieving courses id:", error));
+    };
+
+    const getAllCourses = () => {
+        fetch("http://localhost:8080/api/course")
+            .then(response => response.json())
+            .then(data => {
+                setAllCourseList(data);
+            })
+            .catch(error => console.error("Error while retrieving courses id:", error));
+    };
+
+    const generateCourseDictionary = () => {
+        const courseDtoList = allCourseList.map((course : CourseDto) => course);
+        const excludedIds = courseList.map((course : CourseDto) => course._id);
+        const filteredCourseDtoList = courseDtoList.filter(
+            (course) => !excludedIds.includes(course._id)
+        );
+
+        const dictionary: CourseDictionary = {};
+
+        for (const course of filteredCourseDtoList) {
+            dictionary[course.name] = course._id;
+        }
+        setCourseDictionary(dictionary);
+    };
+
+    React.useEffect(() => {
+        getAllLecturerCourse();
+        getAllCourses();
+    }, []);
+
+    React.useEffect(() => {
+        generateCourseDictionary();
+    }, [allCourseList, courseList]);
+
+
     const addRating = () => {
         if (!getToken()) {
             enqueueSnackbar('Zaloguj się kontem Google');
@@ -66,6 +163,7 @@ export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
             body: JSON.stringify({
                 title: title,
                 description: description,
+                course: course,
                 rating_difficulty: ratingValues.difficulty,
                 rating_knowledge: ratingValues.knowledge,
                 rating_communication: ratingValues.communication,
@@ -181,12 +279,38 @@ export const RatingBoxCreate = (props: RatingBoxCreateProps) => {
                     InputProps={{className: classes.textTopic}}
                 />
             </div>
+            <div>
+                <h2 className={`${classes.red}`}>Kurs</h2>
+                <div style={{display: "flex", alignItems: 'baseline', gap: '0.25em'}}>
+                    <FormControl sx={{m: 1, width: 300}}>
+                        <InputLabel id="demo-single-checkbox-label">Kurs</InputLabel>
+                        <Select
+                            labelId="demo-single-checkbox-label"
+                            id="demo-single-checkbox"
+                            value={course}
+                            onChange={handleCourseChange}
+                            input={<OutlinedInput label="Tag"/>}
+                            MenuProps={MenuProps}
+                        >
+                            {courseList.map((courseData: CourseDto) => (
+                                <MenuItem key={courseData.name} value={courseData._id}>
+                                    {courseData.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <Button variant="contained" style={{fontSize: '1.15rem'}}
+                            onClick={handleOpenAddCourseDialog}>Dodaj</Button>
+                    <AddCourseDialog open={isAddCourseDialogOpen} onClose={handleCloseAddCourseDialog}
+                                     onAdd={handleAddCourse} courses={courseDictionary}/>
+                </div>
+            </div>
             <Button
                 variant="contained"
                 style={{fontSize: "1.15rem", alignSelf: "flex-end", marginTop: "1em"}}
                 disabled={title === "" || description === "" || ratingValues.knowledge === 0
-                    || ratingValues.friendliness === 0 || ratingValues.communication === 0
-                    || ratingValues.difficulty === 0}
+                || ratingValues.friendliness === 0 || ratingValues.communication === 0
+                || ratingValues.difficulty === 0}
                 onClick={addRating}
             >
                 Dodaj opinię
