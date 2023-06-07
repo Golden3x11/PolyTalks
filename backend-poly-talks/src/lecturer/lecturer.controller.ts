@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import {LecturerService} from './lecturer.service';
 import {CreateLecturerDto} from './dto/create-lecturer.dto';
 import {UpdateLecturerDto} from './dto/update-lecturer.dto';
@@ -19,6 +19,11 @@ export class LecturerController {
     @Get()
     async findAll() {
         return this.lecturerService.findAll();
+    }
+
+    @Get('popular')
+    async findPopularLecturers(@Query('token') token?: string){
+        return this.lecturerService.findPopularLecturers(token);
     }
 
     @Get(':id')

@@ -1,8 +1,7 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import mongoose, {Document} from 'mongoose';
 import {Post, PostSchema} from "./post.entity";
-import {User, UserSchema} from "../../user/entities/user.entity";
-import {Tag} from "../../tag/entities/tag.entity";
+import {User} from "../../user/entities/user.entity";
 
 export type ThreadDocument = Thread & Document;
 

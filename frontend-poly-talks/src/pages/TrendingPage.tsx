@@ -1,11 +1,11 @@
-import { Typography } from '@mui/material';
+import { TodayTrends } from '../components/homepage/TodayTrends';
+import { PopularLecturers } from '../components/homepage/PopularLecturers';
 
 export const TrendingPage = () => {
   return (
-    <div>
-      <Typography>
-        Trending
-      </Typography>
+    <div style={{margin: '0 2em', display: 'flex', flexDirection: 'column', gap: '0.3em', height: "100%"}}>
+      <TodayTrends/>
+      <PopularLecturers/>
     </div>
   );
 };
