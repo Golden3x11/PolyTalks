@@ -21,13 +21,13 @@ export const PopularLecturers = () => {
   const {classes} = useStyles();
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/lecturer')
+    fetch('http://localhost:8080/api/lecturer/popular')
       .then(response => response.json())
       .then(data => setLecturers(data))
   }, [])
 
   return <div className={classes.container}>
-    <h1 className={classes.red} style={{fontWeight: 'bold'}}>Popularni prowadzący</h1>
+    <h1 className={classes.red} style={{fontWeight: 'bold'}}>Znasz ich? Wystaw opinię 😀</h1>
     <Stack
       direction={"column"}
       spacing={2}
